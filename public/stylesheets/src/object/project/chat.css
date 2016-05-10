@@ -3,5 +3,43 @@
 //-------------------------------------*/
 
 .p-chat {
-  
+  width: 300px;
+  padding: 5px 5px 5px 0;
+  background-color: #222;
+}
+.p-chat__inner {
+  height: calc(100vh - 58px);
+  padding: 10px;
+}
+.p-chat__list {
+  overflow-y: scroll;
+  height: 100%;
+}
+.p-chat__list > li {
+  padding: 10px;
+  color: #fff;
+  font-size: $font-size-ss;
+}
+.p-chat__comment {
+  padding: 10px;
+  background-color: #333;
+  font-size: 0;
+}
+.p-chat__comment__txt {
+  display: inline-block;
+  width: 235px;
+  padding-right: 10px;
+}
+.p-chat__comment__txt__input {
+  width: 100%;
+  color: #fff;
+  font-size: 12px;
+}
+.p-chat__comment__btn {
+  width: 40px;
+  padding: 5px 0;
+  background-color: #2244aa;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
 }
