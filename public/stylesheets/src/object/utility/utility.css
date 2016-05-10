@@ -1,0 +1,88 @@
+/*-------------------------------------//
+//  Utility
+//-------------------------------------*/
+
+/*  Clearfix
+//-------------------------------------*/
+
+.u-cf:before,
+.u-cf:after {
+    content: "";
+    display: table !important;
+}
+.u-cf:after { clear: both; }
+
+.u-fl { float: left; }
+.u-fr { float: right; }
+
+/*.u-fulimg {
+    width: 100%;
+    height: auto;
+}*/
+
+
+/*  Ellipsis
+//-------------------------------------*/
+
+/*@mixin u-ellipsis() {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+.u-ellipsis-1 {
+    @include u-ellipsis();
+    -webkit-line-clamp: 1;
+}*/
+
+
+/*  Hover Fade
+//-------------------------------------*/
+
+/*.u-hover { transition: opacity .3s linear; }
+.u-hover:hover { opacity: .6; }*/
+
+
+/*  Display Classes
+//-------------------------------------*/
+
+/*.u-dn { display: none !important;  }
+.u-db { display: block !important;  }
+.u-di { display: inline !important;  }*/
+/*.u-dib { display: inline-block !important; }*/
+/*.u-dt { display: table !important; }
+.u-dc { display: table-cell !important; }*/
+
+
+/*  Spacing Classes
+//-------------------------------------*/
+
+
+
+/*  Text Decorative Classes
+//-------------------------------------*/
+
+/*.u-fsxl { font-size: $font-size-xl }
+.u-fsll { font-size: $font-size-ll }
+.u-fsl { font-size: $font-size-l }
+.u-fsm { font-size: $font-size-m }
+.u-fss { font-size: $font-size-s }
+.u-fsss { font-size: $font-size-ss }
+.u-fsxs { font-size: $font-size-xs }*/
+
+/*.u-n { font-weight: normal !important; }
+.u-b { font-weight: bold !important; }
+.u-i { font-style: italic !important; }
+.u-l { text-align: left !important; }*/
+/*.u-c { text-align: center !important; }*/
+/*.u-r { text-align: right !important; }
+.u-u { text-decoration: underline !important; }
+
+.u-v0 { vertical-align: 0; }
+.u-v1 { vertical-align: -1px; }
+.u-v2 { vertical-align: -2px; }
+.u-v3 { vertical-align: -3px; }
+.u-v4 { vertical-align: -4px; }
+.u-v5 { vertical-align: -5px; }
+.u-vt { vertical-align: top; }
+.u-vm { vertical-align: middle; }
+.u-vb { vertical-align: bottom; }*/

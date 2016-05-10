@@ -1,0 +1,27 @@
+/*-------------------------------------//
+//  Settings
+//-------------------------------------*/
+
+/*  Base
+//-------------------------------------*/
+
+$base-background-color: #fff;
+$base-font-color: #222;
+$base-font-size: 16px;
+
+
+/*  Other
+//-------------------------------------*/
+
+
+
+/*  Font
+//-------------------------------------*/
+
+$font-size-xl: calc($base-font-size + 6);
+$font-size-ll: calc($base-font-size + 4);
+$font-size-l: calc($base-font-size + 2);
+$font-size-m: $base-font-size;
+$font-size-s: calc($base-font-size - 2);
+$font-size-ss: calc($base-font-size - 4);
+$font-size-xs: calc($base-font-size - 6);
