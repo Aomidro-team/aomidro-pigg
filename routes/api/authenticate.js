@@ -13,12 +13,10 @@ router.post('/', (req, res) => {
     const secret = 'fuga';
     const token = jwt.sign(user, secret, { expiresIn: '2h' });
 
-    user.token = token;
-
-    res.json(user);
+    res.json({ token });
+  } else {
+    res.sendStatus(401);
   }
-
-  res.sendStatus(401);
 });
 
 module.exports = router;

@@ -9,6 +9,7 @@ const debug = require('debug')('aomidro-pigg:server');
 const http = require('http');
 const server = http.Server(app);
 const io = require('socket.io')(server);
+const socketioJwt = require('socketio-jwt');
 
 /**
  * Normalize a port into a number, string, or false.
@@ -41,15 +42,18 @@ app.set('port', port);
  * socket.io
  */
 
- // Socket.IO
 server.listen(app.get('port'), () => {
   console.log('listening!!!');
 });
 
-io.on('connection', socket => {
-  socket.on('c2s_message', msg => {
-    console.log(`message: ${msg}`);
-    io.emit('chat message', msg);
+io.set('authorization', socketioJwt.authorize({
+  secret: 'fuga',
+  handshake: true
+}));
+
+io.sockets.on('connection', socket => {
+  socket.on('hoge', msg => {
+    socket.emit('hoge', msg);
   });
 });
 
