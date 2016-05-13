@@ -8,8 +8,8 @@ const app = require('../app');
 const debug = require('debug')('aomidro-pigg:server');
 const http = require('http');
 const server = http.Server(app);
-const io = require('socket.io')(server);
-const socketioJwt = require('socketio-jwt');
+const socketConnection = require('../app/socketConnection');
+
 
 /**
  * Normalize a port into a number, string, or false.
@@ -46,16 +46,7 @@ server.listen(app.get('port'), () => {
   console.log('listening!!!');
 });
 
-io.set('authorization', socketioJwt.authorize({
-  secret: 'fuga',
-  handshake: true
-}));
-
-io.sockets.on('connection', socket => {
-  socket.on('hoge', msg => {
-    socket.emit('hoge', msg);
-  });
-});
+socketConnection(server);
 
 
 /**
@@ -75,10 +66,12 @@ function onError(error) {
       console.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
+
     case 'EADDRINUSE':
       console.error(`${bind} is already in use`);
       process.exit(1);
       break;
+
     default:
       throw error;
   }
