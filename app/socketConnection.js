@@ -6,7 +6,7 @@ const socketConnection = server => {
   const io = socektIo(server);
 
   io.set('authorization', socketioJwt.authorize({
-    secret: config.get('authenticate').secret,
+    secret: config.get('auth').secret,
     handshake: true
   }));
 

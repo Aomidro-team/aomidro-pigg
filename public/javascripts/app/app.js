@@ -21,7 +21,7 @@ const connectSocket = token => {
   });
 };
 
-fetch('/api/authenticate', {
+fetch('/api/auth', {
   method: 'POST',
   headers: {
     Accept: 'application/json',

@@ -20,7 +20,7 @@ build
 bundle.css
 bundle.js
 
-config
+config/*.json
 node_modules
 .DS_Store
 .sass-cache
