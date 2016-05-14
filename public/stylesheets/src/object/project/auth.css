@@ -1,0 +1,55 @@
+/*-------------------------------------//
+//  Auth
+//-------------------------------------*/
+
+.p-auth__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: #555;
+}
+.p-auth__inner {
+  display: inline-block;
+  padding: 20px;
+  background-color: #222;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, .6);
+  color: #fff;
+}
+.p-auth__title {
+  margin-bottom: 20px;
+  padding: 0 10px 10px;
+  border-bottom: 1px solid #ccc;
+  font-size: calc($font-size-xl + 4px);
+  text-align: center;
+}
+.p-auth__form {
+  width: 300px;
+  margin-bottom: 20px;
+}
+.p-auth__form > li:not(:first-child) { margin-top: 20px; }
+.p-auth__form__title {
+  margin-bottom: 10px;
+  color: #7f7f7f;
+}
+.p-auth__input {
+  width: 100%;
+  padding: 5px 10px;
+  background-color: #333;
+  font-size: $font-size-m;
+}
+.p-auth__submit {
+  display: block;
+  width: 180px;
+  margin: 0 auto;
+  background-color: #2244aa;
+  font-size: $font-size-m;
+  line-height: 40px;
+  cursor: pointer;
+  transition: background-color .4s;
+}
+.p-auth__submit:hover { background-color: #2270AA; }
+.p-auth__error:not(:empty) {
+  margin-bottom: 20px;
+  color: #E45858;
+}

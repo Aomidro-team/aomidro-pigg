@@ -1,0 +1,30 @@
+<% extend 'layout/base' %>
+
+<div class="p-auth__wrapper">
+  <div class="p-auth__inner">
+    <h1 class="p-auth__title">Join AomidroPigg</h1>
+
+    <form action="/register" method="POST">
+      <ul class="p-auth__form">
+        <li>
+          <p class="p-auth__form__title">User ID</p>
+          <p><input class="p-auth__input" type="text" name="userId" required></p>
+        </li>
+        <li>
+          <p class="p-auth__form__title">Name</p>
+          <p><input class="p-auth__input" type="text" name="name" required></p>
+        </li>
+        <li>
+          <p class="p-auth__form__title">Mail</p>
+          <p><input class="p-auth__input" type="text" name="mail" required></p>
+        </li>
+        <li>
+          <p class="p-auth__form__title">Password</p>
+          <p><input class="p-auth__input" type="password" name="password" required></p>
+        </li>
+      </ul>
+
+      <input class="p-auth__submit u-hover" type="submit" value="Send">
+    </form>
+  </div>
+</div>
