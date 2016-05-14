@@ -11,7 +11,6 @@ router.post('/', (req, res) => {
 
   // TODO: change to connecting DB
   if (user.username === 'hoge' && user.password === 'hoge') {
-    const secret = 'fuga';
     const token = jwt.sign(user, config.get('authenticate').secret, { expiresIn: '2h' });
 
     res.json({ token });
