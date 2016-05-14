@@ -5,9 +5,19 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const ECT = require('ect');
+const config = require('config');
 
 const routes = require('./routes/index');
 const auth = require('./routes/api/auth');
+const register = require('./routes/auth/register');
+const login = require('./routes/auth/login');
+const logout = require('./routes/auth/logout');
+
+const passport = require('passport');
+const flash = require('connect-flash');
+const session = require('express-session');
+const getLocalStrategy = require('./app/getLocalStrategy');
+const connection = require('./app/mysqlConnection');
 
 const app = express();
 
@@ -23,8 +33,44 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+  secret: config.get('auth').secret,
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(getLocalStrategy());
+
+passport.serializeUser((account, done) => {
+  done(null, {
+    id: account.id,
+    userId: account.user_id,
+    name: account.name,
+    mail: account.mail
+  });
+});
+
+passport.deserializeUser((serializedAccount, done) => {
+  const query = `SELECT * FROM users WHERE id = "${serializedAccount}"`;
+
+  connection.query(query, (err, account) => {
+    done(err, {
+      id: account.id,
+      userId: account.user_id,
+      name: account.name,
+      mail: account.mail
+    });
+  });
+});
+
 app.use('/', routes);
 app.use('/api/auth', auth);
+app.use('/register', register);
+app.use('/login', login);
+app.use('/logout', logout);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

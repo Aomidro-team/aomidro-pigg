@@ -1,9 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
-/* GET home page. */
 router.get('/', (req, res) => {
-  res.render('index', { title: 'アオミドロピグ' });
+  if (!req.session.passport) {
+    res.redirect('/login');
+  }
+
+  res.render('index', {
+    title: 'アオミドロピグ',
+    userId: req.session.passport.user.userId
+  });
 });
 
 module.exports = router;

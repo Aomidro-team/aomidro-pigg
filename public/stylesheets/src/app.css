@@ -39,9 +39,9 @@
 //--------------------------------------------*/
 
 @import "./object/project/chat";
-/*@import "./object/project/register";
-@import "./object/project/result";
-@import "./object/project/killRatio";
+@import "./object/project/auth";
+@import "./object/project/canvas";
+/*@import "./object/project/killRatio";
 @import "./object/project/winper";
 @import "./object/project/weapon";*/
 
