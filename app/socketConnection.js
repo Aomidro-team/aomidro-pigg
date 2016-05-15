@@ -11,10 +11,25 @@ const socketConnection = server => {
   }));
 
   io.sockets.on('connection', socket => {
-    socket.on('hoge', msg => {
-      socket.broadcast.emit('hoge', msg);
-    });
+    const socketCallbacks = new SocketCallbacks(socket, io);
+
+    socketCallbacks.events();
   });
 };
+
+class SocketCallbacks {
+  constructor(socket, io) {
+    this.socket = socket;
+    this.io = io;
+  }
+
+  events() {
+    this.socket.on('message', this.returnToEntire.bind(this));
+  }
+
+  returnToEntire(value) {
+    this.io.sockets.emit('message', value);
+  }
+}
 
 module.exports = socketConnection;

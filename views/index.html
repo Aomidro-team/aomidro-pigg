@@ -3,18 +3,26 @@
 <div class="wrapper">
   <div class="main">
     <div class="p-canvas">
-      <p class="p-canvas__name"><%= @userId %></p>
+      <p class="p-canvas__name">
+        <span class="js-user-name"><%= @userId %></span>
+      </p>
     </div>
   </div>
 
   <div class="p-chat">
-    <div class="p-chat__inner">
-      <ul class="p-chat__list"></ul>
+    <div class="p-chat__inner js-chat">
+      <div class="p-chat__box">
+        <ul class="p-chat__list js-chat-list"></ul>
+      </div>
     </div>
 
-    <form class="p-chat__comment">
-      <div class="p-chat__comment__txt"><input class="p-chat__comment__txt__input" type="text" placeholder="チャットを送る…"></div>
+    <form class="p-chat__comment js-chat-form">
+      <div class="p-chat__comment__txt"><input class="p-chat__comment__txt__input" name="comment" type="text" placeholder="チャットを送る…" autocomplete="off"></div>
       <input class="p-chat__comment__btn" type="submit" value="送信">
     </form>
   </div>
 </div>
+
+<% block 'scripts' : %>
+  <script src="/javascripts/bundle.js"></script>
+<% end %>

@@ -1,25 +1,4 @@
-import io from 'socket.io-client';
-
-const connectSocket = token => {
-  const socket = io.connect('', {
-    query: `token=${token}`
-  });
-
-  socket
-  .on('connect', () => {
-    console.log('authenticated');
-
-    setTimeout(() => {
-      socket.emit('hoge', { hoge: 'piyo' });
-    }, 3000);
-
-    socket.on('hoge', msg => {
-      console.log(msg);
-    });
-  }).on('disconnect', () => {
-    console.log('disconnected');
-  });
-};
+import connectSocket from './connectSocket';
 
 fetch('/api/auth', {
   method: 'POST',
