@@ -3,12 +3,13 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   if (!req.session.passport) {
-    res.redirect('/login');
+    return res.redirect('/login');
   }
 
-  res.render('index', {
+  return res.render('index', {
     title: 'アオミドロピグ',
-    userId: req.session.passport.user.userId
+    userId: req.session.passport.user.userId,
+    userPassword: req.session.passport.user.password
   });
 });
 

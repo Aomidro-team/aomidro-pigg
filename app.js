@@ -49,7 +49,8 @@ passport.serializeUser((account, done) => {
     id: account.id,
     userId: account.user_id,
     name: account.name,
-    mail: account.mail
+    mail: account.mail,
+    password: account.password
   });
 });
 
@@ -61,7 +62,8 @@ passport.deserializeUser((serializedAccount, done) => {
       id: account.id,
       userId: account.user_id,
       name: account.name,
-      mail: account.mail
+      mail: account.mail,
+      password: account.password
     });
   });
 });

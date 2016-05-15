@@ -1,18 +1,20 @@
 import connectSocket from './connectSocket';
 
+const userName = document.querySelector('.js-user-name').textContent;
+const userPassword = document.querySelector('.js-user-password').value;
+
 fetch('/api/auth', {
   method: 'POST',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json'
   },
-  // TODO: change to login
   body: JSON.stringify({
-    username: 'hoge',
-    password: 'hoge'
+    username: userName,
+    password: userPassword
   })
 })
 .then(response => response.json())
 .then(json => {
-  connectSocket(json.token);
+  connectSocket(json.token, userName);
 });
