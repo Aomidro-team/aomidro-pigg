@@ -8,12 +8,18 @@
   background-color: #222;
 }
 .p-chat__inner {
+  overflow-y: scroll;
   height: calc(100vh - 58px);
   padding: 10px;
 }
-.p-chat__list {
-  overflow-y: scroll;
+.p-chat__box {
+  display: table;
   height: 100%;
+}
+.p-chat__list {
+  display: table-cell;
+  width: 100%;
+  vertical-align: bottom;
 }
 .p-chat__list > li {
   padding: 10px;
