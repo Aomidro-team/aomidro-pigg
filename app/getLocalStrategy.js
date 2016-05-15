@@ -17,7 +17,7 @@ module.exports = () => new LocalStrategy(
           return done(err);
         }
 
-        if (!account) {
+        if (account.length === 0) {
           req.flash('error', 'ユーザーが見つかりませんでした。');
           req.flash('input_id', userId);
           req.flash('input_password', password);
