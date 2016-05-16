@@ -1,19 +1,8 @@
-import io from 'socket.io-client';
-
-const connectSocket = (token, userName) => {
-  const socket = io.connect('', {
-    query: `token=${token}`
-  });
-  const socketCallbacks = new SocketCallbacks(socket, userName);
-
-  socketCallbacks.events();
-};
-
-class SocketCallbacks {
+class Chat {
   constructor(socket, userName) {
     this.socket = socket;
-
     this.userName = userName;
+
     this.chatWrap = document.querySelector('.js-chat');
     this.chatList = document.querySelector('.js-chat-list');
     this.commentForm = document.querySelector('.js-chat-form');
@@ -54,4 +43,4 @@ class SocketCallbacks {
   }
 }
 
-export default connectSocket;
+export default Chat;
