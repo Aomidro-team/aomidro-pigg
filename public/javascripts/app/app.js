@@ -25,7 +25,7 @@ class AomidroPigg {
   }
 }
 
-const userName = document.querySelector('.js-user-name').textContent;
+const userName = document.querySelector('.js-user-name').value;
 const userPassword = document.querySelector('.js-user-password').value;
 const aomidroPigg = new AomidroPigg(userName, userPassword);
 
