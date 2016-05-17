@@ -1,7 +1,6 @@
 import 'babel-polyfill';
 import io from 'socket.io-client';
-import ChatController from './chat/Controller';
-import Canvas from './modules/Canvas';
+import ChatApp from './chat/App';
 
 class AomidroPigg {
   constructor(userName, userPassword, el) {
@@ -15,9 +14,9 @@ class AomidroPigg {
     (async () => {
       const token = await this.fetchToken();
       const socket = this.connectSocket(token);
-      const canvas = new Canvas(socket, this.userName);
+      const chatApp = new ChatApp(socket, this.userName, this.el.chat);
 
-      canvas.init();
+      chatApp.init();
     })();
   }
 
