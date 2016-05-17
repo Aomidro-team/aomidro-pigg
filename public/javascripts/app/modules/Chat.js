@@ -3,9 +3,7 @@ class Chat {
     this.socket = socket;
     this.userName = userName;
 
-    this.chatWrap = document.querySelector('.js-chat');
-    this.chatList = document.querySelector('.js-chat-list');
-    this.commentForm = document.querySelector('.js-chat-form');
+    
   }
 
   events() {
