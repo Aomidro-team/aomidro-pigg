@@ -1,13 +1,12 @@
 import 'babel-polyfill';
 import io from 'socket.io-client';
 import ChatApp from './chat/App';
-import Canvas from './canvas/Canvas';
+import CanvasApp from './canvas/App';
 
 class AomidroPigg {
-  constructor(userName, userPassword, el) {
+  constructor(user, el) {
     this.fetchUrl = '/api/auth';
-    this.userName = userName;
-    this.userPassword = userPassword;
+    this.user = user;
     this.el = el;
   }
 
@@ -15,18 +14,18 @@ class AomidroPigg {
     (async () => {
       const token = await this.fetchToken();
       const socket = this.connectSocket(token);
-      const chatApp = new ChatApp(socket, this.userName, this.el.chat);
-      const canvas = new Canvas(socket, this.userName, this.el.canvas);
+      const chatApp = new ChatApp(socket, this.user.name, this.el.chat);
+      const canvasApp = new CanvasApp(socket, this.user, this.el.canvas);
 
       chatApp.init();
-      canvas.init();
+      canvasApp.init();
     })();
   }
 
   fetchToken() {
     const data = JSON.stringify({
-      username: this.userName,
-      password: this.userPassword
+      username: this.user.name,
+      password: this.user.password
     });
 
     return new Promise((resolve, reject) => {

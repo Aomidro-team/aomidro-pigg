@@ -8,7 +8,8 @@ router.get('/', (req, res) => {
 
   return res.render('index', {
     title: 'アオミドロピグ',
-    userId: req.session.passport.user.userId,
+    userId: req.session.passport.user.id,
+    userName: req.session.passport.user.userId,
     userPassword: req.session.passport.user.password
   });
 });

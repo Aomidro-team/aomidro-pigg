@@ -21,7 +21,10 @@ export default class Store extends events.EventEmitter {
   }
 
   addChatList(data) {
-    this.chatList.push(data.msg);
+    this.chatList = [
+      ...this.chatList,
+      data.msg
+    ];
     this.emit('addChatList');
   }
 

@@ -11,7 +11,7 @@ export default class ChatView extends Component {
     props.socket.on('message', props.action.receiveMessage.bind(props.action));
     props.socket.on('connect', props.action.connectChat.bind(props.action));
 
-    props.store.on('addChatList', this.addChatList.bind(this));
+    props.store.on('addChatList', this.onAddChatList.bind(this));
     window.addEventListener('beforeunload', props.action.disconnectChat.bind(props.action));
   }
 
@@ -30,7 +30,7 @@ export default class ChatView extends Component {
     }
   }
 
-  addChatList() {
+  onAddChatList() {
     this.setState({ chatList: this.props.store.getChatList() });
   }
 
