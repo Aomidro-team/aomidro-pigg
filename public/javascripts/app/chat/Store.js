@@ -1,17 +1,19 @@
-export default class Store {
+import events from 'events';
+
+export default class Store extends events.EventEmitter {
   constructor() {
+    super();
     this.chatList = [];
   }
 
   init(socket, userName, dispatcher) {
     this.socket = socket;
     this.userName = userName;
-    this.dispatcher = dispatcher;
 
-    this.socket.on('message', this.addChatList.bind(this));
-    this.dispatcher.on('connectChat', this.passChat.bind(this, '入室'));
-    this.dispatcher.on('disconnectChat', this.passChat.bind(this, '退室'));
-    this.dispatcher.on('sendMessage', this.sendMessage.bind(this));
+    dispatcher.on('connectChat', this.passChat.bind(this, '入室'));
+    dispatcher.on('disconnectChat', this.passChat.bind(this, '退室'));
+    dispatcher.on('sendMessage', this.sendMessage.bind(this));
+    dispatcher.on('receiveMessage', this.addChatList.bind(this));
   }
 
   getChatList() {
@@ -20,7 +22,7 @@ export default class Store {
 
   addChatList(data) {
     this.chatList.push(data.msg);
-    this.dispatcher.emit('addChatList');
+    this.emit('addChatList');
   }
 
   passChat(type) {

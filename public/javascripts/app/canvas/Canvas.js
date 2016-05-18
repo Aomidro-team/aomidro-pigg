@@ -1,10 +1,10 @@
 class Canvas {
-  constructor(socket, userName) {
+  constructor(socket, userName, canvas) {
     this.socket = socket;
     this.users = [];
     this.userName = userName;
 
-    this.canvas = document.getElementById('js-canvas');
+    this.canvas = canvas;
     this.context = this.canvas.getContext('2d');
     this.me = {};
 

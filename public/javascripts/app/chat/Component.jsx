@@ -8,9 +8,11 @@ export default class ChatView extends Component {
     this.scrollFlag = false;
     this.state = { chatList: props.store.getChatList() };
 
-    props.dispatcher.on('addChatList', this.addChatList.bind(this));
-    props.socket.on('connect', () => { props.dispatcher.emit('connectChat'); });
-    window.addEventListener('beforeunload', () => { props.dispatcher.emit('disconnectChat'); });
+    props.socket.on('message', props.action.receiveMessage.bind(props.action));
+    props.socket.on('connect', props.action.connectChat.bind(props.action));
+
+    props.store.on('addChatList', this.addChatList.bind(this));
+    window.addEventListener('beforeunload', props.action.disconnectChat.bind(props.action));
   }
 
   componentWillUpdate() {
@@ -37,9 +39,9 @@ export default class ChatView extends Component {
 
     const target = e.target;
     const comment = target.comment.value;
-    const { dispatcher } = this.props;
+    const { action } = this.props;
 
-    dispatcher.emit('sendMessage', comment);
+    action.sendMessage(comment);
     target.comment.value = '';
   }
 
@@ -70,6 +72,6 @@ export default class ChatView extends Component {
 
 ChatView.propTypes = {
   socket: PropTypes.object.isRequired,
-  dispatcher: PropTypes.object.isRequired,
+  action: PropTypes.object.isRequired,
   store: PropTypes.object.isRequired
 };
