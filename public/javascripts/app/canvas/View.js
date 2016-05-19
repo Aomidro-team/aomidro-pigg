@@ -11,10 +11,16 @@ export default class CanvasView {
     this.state = { users: props.store.getUsers() };
 
     window.addEventListener('resize', this.setSize.bind(this), false);
+    window.addEventListener('beforeunload', props.action.disconnectCanvas.bind(props.action));
     this.canvas.addEventListener('click', this.setGoalPos.bind(this), false);
 
     props.socket.on('connect', props.action.connectCanvas.bind(props.action, initPos));
-    props.store.on('addUser', this.onAddUser.bind(this));
+    props.socket.on('sendAllUser', props.action.receiveUsers.bind(props.action));
+    props.socket.on('addUser', props.action.receiveUser.bind(props.action));
+    props.socket.on('removeUser', props.action.removeUser.bind(props.action));
+    props.socket.on('newGoalPos', props.action.receiveGoalPos.bind(props.action));
+
+    props.store.on('changeUsers', this.onChangeUsers.bind(this));
     props.store.on('changePos', this.onChangePos.bind(this));
   }
 
@@ -28,7 +34,7 @@ export default class CanvasView {
     this.canvas.height = innerHeight - 10;
   }
 
-  onAddUser() {
+  onChangeUsers() {
     this.state = { users: this.props.store.getUsers() };
   }
 

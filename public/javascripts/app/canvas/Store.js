@@ -23,17 +23,21 @@ export default class Store extends events.EventEmitter {
     this.socket = socket;
     this.selfId = user.id;
 
-    dispatcher.on('connectCanvas', this.addSelf.bind(this, user));
-    dispatcher.on('setSelfGoalPos', this.changeSelfGoalPos.bind(this, user));
+    dispatcher.on('connectCanvas', this.sendSelf.bind(this, user));
+    dispatcher.on('disconnectCanvas', this.disconnectCanvas.bind(this, user));
+    dispatcher.on('setSelfGoalPos', this.sendSelfNewGoalPos.bind(this, user));
     dispatcher.on('updateCurrentPos', this.updateCurrentPos.bind(this));
+    dispatcher.on('receiveUser', this.addUser.bind(this));
+    dispatcher.on('removeUser', this.removeUser.bind(this));
+    dispatcher.on('receiveGoalPos', this.changePos.bind(this));
   }
 
   getUsers() {
     return this.users;
   }
 
-  addSelf(user, initPos) {
-    this.addUser(Object.assign({}, this.userTemp, {
+  sendSelf(user, initPos) {
+    this.socket.emit('addUser', Object.assign({}, this.userTemp, {
       id: user.id,
       name: user.name,
       current: initPos,
@@ -41,18 +45,28 @@ export default class Store extends events.EventEmitter {
     }));
   }
 
+  disconnectCanvas() {
+    this.socket.emit('disconnectCanvas', this.getSelf());
+  }
+
   addUser(user) {
     this.users = [
       ...this.users,
       user
     ];
-    this.emit('addUser');
+    this.emit('changeUsers');
   }
 
-  changeSelfGoalPos(user, pos) {
-    this.changePos(Object.assign({}, this.getSelf(), {
+  removeUser(leavedUser) {
+    this.users = this.users.filter(user => user.id !== leavedUser.id);
+    this.emit('changeUsers');
+  }
+
+  sendSelfNewGoalPos(user, pos) {
+    this.socket.emit('updateGoalPos', {
+      id: user.id,
       goal: pos
-    }));
+    });
   }
 
   getSelf() {
@@ -62,7 +76,7 @@ export default class Store extends events.EventEmitter {
   changePos(changedUser) {
     this.users = this.users.map(user => {
       if (user.id === changedUser.id) {
-        return changedUser;
+        return Object.assign({}, user, changedUser);
       }
 
       return user;
