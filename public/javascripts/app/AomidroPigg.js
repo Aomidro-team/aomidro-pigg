@@ -10,16 +10,14 @@ class AomidroPigg {
     this.el = el;
   }
 
-  start() {
-    (async () => {
-      const token = await this.fetchToken();
-      const socket = this.connectSocket(token);
-      const chatApp = new ChatApp(socket, this.user.name, this.el.chat);
-      const canvasApp = new CanvasApp(socket, this.user, this.el.canvas);
+  async start() {
+    const token = await this.fetchToken();
+    const socket = this.connectSocket(token);
+    const chatApp = new ChatApp(socket, this.user.name, this.el.chat);
+    const canvasApp = new CanvasApp(socket, this.user, this.el.canvas);
 
-      chatApp.init();
-      canvasApp.init();
-    })();
+    chatApp.init();
+    canvasApp.init();
   }
 
   fetchToken() {
