@@ -6,9 +6,10 @@ export default class Store extends events.EventEmitter {
     this.chatList = [];
   }
 
-  init(socket, userName, dispatcher) {
+  init(socket, user, dispatcher) {
     this.socket = socket;
-    this.userName = userName;
+    this.userName = user.name;
+    this.userId = user.id;
 
     dispatcher.on('connectChat', this.passChat.bind(this, '入室'));
     dispatcher.on('disconnectChat', this.passChat.bind(this, '退室'));
@@ -23,16 +24,22 @@ export default class Store extends events.EventEmitter {
   addChatList(data) {
     this.chatList = [
       ...this.chatList,
-      data.msg
+      data
     ];
     this.emit('addChatList');
   }
 
   passChat(type) {
-    this.socket.emit('message', { msg: `${this.userName}が${type}しました` });
+    this.socket.emit('message', {
+      userId: this.userId,
+      msg: `${this.userName}が${type}しました`
+    });
   }
 
   sendMessage(data) {
-    this.socket.emit('message', { msg: `${this.userName}: ${data}` });
+    this.socket.emit('message', {
+      userId: this.userId,
+      msg: `${this.userName}: ${data}`
+    });
   }
 }

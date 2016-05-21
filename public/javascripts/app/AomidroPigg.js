@@ -13,7 +13,7 @@ class AomidroPigg {
   async start() {
     const token = await this.fetchToken();
     const socket = this.connectSocket(token);
-    const chatApp = new ChatApp(socket, this.user.name, this.el.chat);
+    const chatApp = new ChatApp(socket, this.user, this.el.chat);
     const canvasApp = new CanvasApp(socket, this.user, this.el.canvas);
 
     chatApp.init();

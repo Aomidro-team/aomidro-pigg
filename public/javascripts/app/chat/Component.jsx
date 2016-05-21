@@ -46,8 +46,7 @@ export default class ChatView extends Component {
   }
 
   renderList() {
-    // TODO: Key must change from index to chat's ID.
-    return this.state.chatList.map((chat, i) => <li key={i}>{chat}</li>);
+    return this.state.chatList.map(chat => <li key={chat.msgId}>{chat.msg}</li>);
   }
 
   render() {

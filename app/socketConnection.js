@@ -1,6 +1,8 @@
 const socektIo = require('socket.io');
 const socketioJwt = require('socketio-jwt');
 const config = require('config');
+const moment = require('moment');
+const connection = require('./mysqlConnection');
 
 let users = [];
 
@@ -26,14 +28,30 @@ class SocketCallbacks {
   }
 
   events() {
-    this.socket.on('message', this.returnMsgToEntire.bind(this));
+    this.socket.on('message', this.onReceiveMsg.bind(this));
     this.socket.on('addUser', this.addUser.bind(this));
     this.socket.on('disconnectCanvas', this.removeUser.bind(this));
     this.socket.on('updateGoalPos', this.updateGoalPos.bind(this));
   }
 
-  returnMsgToEntire(value) {
-    this.io.sockets.emit('message', value);
+  onReceiveMsg(value) {
+    const current = moment().format('YYYY-MM-DD HH:mm:ss');
+    const query = `
+      INSERT INTO
+        messages
+          (user_id, content, created_at, updated_at)
+        VALUES
+          ("${value.userId}", "${value.msg}", "${current}", "${current}")`;
+
+    connection.query(query, (err, results) => {
+      if (err) {
+        throw err;
+      }
+
+      this.io.sockets.emit('message', Object.assign({}, value, {
+        msgId: results.insertId
+      }));
+    });
   }
 
   addUser(user) {

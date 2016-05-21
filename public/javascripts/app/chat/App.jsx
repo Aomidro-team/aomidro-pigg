@@ -11,11 +11,11 @@ const action = new ActionCreator(EventEmitter);
 const store = new Store();
 
 export default class ChatApp {
-  constructor(socket, userName, chat) {
+  constructor(socket, user, chat) {
     this.socket = socket;
     this.chatWrap = chat;
 
-    store.init(socket, userName, EventEmitter);
+    store.init(socket, user, EventEmitter);
   }
 
   init() {
