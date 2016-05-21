@@ -26,7 +26,10 @@
   padding: 10px;
   color: #fff;
   font-size: $font-size-ss;
+
+  &.p-chat__list__inputing { color: #777; }
 }
+
 .p-chat__comment {
   padding: 10px;
   background-color: #333;

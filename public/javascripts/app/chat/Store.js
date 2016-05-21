@@ -4,6 +4,7 @@ export default class Store extends events.EventEmitter {
   constructor() {
     super();
     this.chatList = [];
+    this.inputingUsers = [];
   }
 
   init(socket, user, dispatcher) {
@@ -15,10 +16,16 @@ export default class Store extends events.EventEmitter {
     dispatcher.on('disconnectChat', this.passChat.bind(this, '退室'));
     dispatcher.on('sendMessage', this.sendMessage.bind(this));
     dispatcher.on('receiveMessage', this.addChatList.bind(this));
+    dispatcher.on('sendIsInputing', this.sendIsInputing.bind(this));
+    dispatcher.on('receiveIsInputing', this.receiveIsInputing.bind(this));
   }
 
   getChatList() {
     return this.chatList;
+  }
+
+  getInputingUsers() {
+    return this.inputingUsers;
   }
 
   addChatList(data) {
@@ -41,5 +48,17 @@ export default class Store extends events.EventEmitter {
       userId: this.userId,
       msg: `${this.userName}: ${data}`
     });
+  }
+
+  sendIsInputing(isInputing) {
+    this.socket.emit('changeIsInputing', {
+      name: this.userName,
+      isInputing
+    });
+  }
+
+  receiveIsInputing(changedUser) {
+    this.inputingUsers = changedUser.isInputing ? [...this.inputingUsers.filter(user => user !== changedUser.name), changedUser.name] : this.inputingUsers.filter(user => user !== changedUser.name);
+    this.emit('changeInputingUsers');
   }
 }

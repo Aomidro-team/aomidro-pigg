@@ -18,4 +18,12 @@ export default class ActionCreator {
   receiveMessage(data) {
     this.dispatcher.emit('receiveMessage', data);
   }
+
+  sendIsInputing(isInputing) {
+    this.dispatcher.emit('sendIsInputing', isInputing);
+  }
+
+  receiveIsInputing(user) {
+    this.dispatcher.emit('receiveIsInputing', user);
+  }
 }

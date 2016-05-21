@@ -29,6 +29,8 @@ class SocketCallbacks {
 
   events() {
     this.socket.on('message', this.onReceiveMsg.bind(this));
+    this.socket.on('changeIsInputing', this.changeIsInputing.bind(this));
+
     this.socket.on('addUser', this.addUser.bind(this));
     this.socket.on('disconnectCanvas', this.removeUser.bind(this));
     this.socket.on('updateGoalPos', this.updateGoalPos.bind(this));
@@ -52,6 +54,10 @@ class SocketCallbacks {
         msgId: results.insertId
       }));
     });
+  }
+
+  changeIsInputing(user) {
+    this.socket.broadcast.emit('changeIsInputing', user);
   }
 
   addUser(user) {
