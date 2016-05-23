@@ -1,3 +1,4 @@
 # aomidro-pigg
 
-chat application.
+AomidroPigg is chat application.
+This app is AmebaPigg flavor.
