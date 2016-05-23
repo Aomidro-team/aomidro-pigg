@@ -14,8 +14,9 @@ export default class ChatView extends Component {
       isInputing: []
     };
 
-    props.socket.on('message', props.action.receiveMessage.bind(props.action));
     props.socket.on('connect', props.action.connectChat.bind(props.action));
+    props.socket.on('sendRecentlyMsg', props.action.sendRecentlyMsg.bind(props.action));
+    props.socket.on('message', props.action.receiveMessage.bind(props.action));
     props.socket.on('changeIsInputing', props.action.receiveIsInputing.bind(props.action));
 
     props.store.on('addChatList', this.onAddChatList.bind(this));

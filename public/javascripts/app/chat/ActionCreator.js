@@ -7,6 +7,10 @@ export default class ActionCreator {
     this.dispatcher.emit('connectChat');
   }
 
+  sendRecentlyMsg(value) {
+    this.dispatcher.emit('sendRecentlyMsg', value);
+  }
+
   disconnectChat() {
     this.dispatcher.emit('disconnectChat');
   }
