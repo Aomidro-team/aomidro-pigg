@@ -12,12 +12,25 @@ export default class Store extends events.EventEmitter {
     this.userName = user.name;
     this.userId = user.id;
 
-    dispatcher.on('connectChat', this.passChat.bind(this, '入室'));
+    dispatcher.on('connectChat', this.connectChat.bind(this));
+    dispatcher.on('sendRecentlyMsg', this.receiveRecentlyMsg.bind(this));
     dispatcher.on('disconnectChat', this.passChat.bind(this, '退室'));
     dispatcher.on('sendMessage', this.sendMessage.bind(this));
     dispatcher.on('receiveMessage', this.addChatList.bind(this));
     dispatcher.on('sendIsInputing', this.sendIsInputing.bind(this));
     dispatcher.on('receiveIsInputing', this.receiveIsInputing.bind(this));
+  }
+
+  connectChat() {
+    this.socket.emit('connectChat', {
+      userId: this.userId,
+      msg: `${this.userName}が入室しました`
+    });
+  }
+
+  receiveRecentlyMsg(value) {
+    this.chatList = value;
+    this.emit('addChatList');
   }
 
   getChatList() {

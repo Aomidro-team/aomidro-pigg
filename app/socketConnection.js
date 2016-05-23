@@ -28,6 +28,7 @@ class SocketCallbacks {
   }
 
   events() {
+    this.socket.on('connectChat', this.onConnectChat.bind(this));
     this.socket.on('message', this.onReceiveMsg.bind(this));
     this.socket.on('changeIsInputing', this.changeIsInputing.bind(this));
 
@@ -36,23 +37,74 @@ class SocketCallbacks {
     this.socket.on('updateGoalPos', this.updateGoalPos.bind(this));
   }
 
-  onReceiveMsg(value) {
-    const current = moment().format('YYYY-MM-DD HH:mm:ss');
-    const query = `
-      INSERT INTO
-        messages
-          (user_id, content, created_at, updated_at)
-        VALUES
-          ("${value.userId}", "${value.msg}", "${current}", "${current}")`;
+  onConnectChat(value) {
+    this.insertMsg(value.userId, value.msg)
+    .then(async res => {
+      const msgs = await this.fetchRecentlyMsg();
 
-    connection.query(query, (err, results) => {
-      if (err) {
-        throw err;
-      }
-
-      this.io.sockets.emit('message', Object.assign({}, value, {
-        msgId: results.insertId
+      this.io.to(this.socket.id).emit('sendRecentlyMsg', msgs.reverse().map(msg => ({
+        msgId: msg.id,
+        msg: msg.content
+      })));
+      this.socket.broadcast.emit('message', Object.assign({}, value, {
+        msgId: res.insertId
       }));
+    })
+    .catch(err => {
+      throw err;
+    });
+  }
+
+  onReceiveMsg(value) {
+    this.insertMsg(value.userId, value.msg)
+    .then(res => {
+      this.io.sockets.emit('message', Object.assign({}, value, {
+        msgId: res.insertId
+      }));
+    })
+    .catch(err => {
+      throw err;
+    });
+  }
+
+  insertMsg(userId, msg) {
+    return new Promise((resolve, reject) => {
+      const current = moment().format('YYYY-MM-DD HH:mm:ss');
+      const query = `
+        INSERT INTO
+          messages
+            (user_id, content, created_at, updated_at)
+          VALUES
+            ("${userId}", "${msg}", "${current}", "${current}")`;
+
+      connection.query(query, (err, results) => {
+        if (err) {
+          reject(err);
+        }
+
+        resolve(results);
+      });
+    });
+  }
+
+  fetchRecentlyMsg() {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT
+          id, content
+        FROM
+          messages
+        ORDER BY
+          created_at DESC
+        LIMIT 50`;
+
+      connection.query(query, (err, results) => {
+        if (err) {
+          reject(err);
+        }
+
+        resolve(results);
+      });
     });
   }
 
