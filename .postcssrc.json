@@ -6,8 +6,8 @@
     "autoprefixer",
     "cssnano"
   ],
-  "input": "./public/stylesheets/src/app.css",
-  "output": "./public/stylesheets/bundle.css",
+  "input": "./public/asstes/stylesheets/src/app.css",
+  "output": "./public/asstes/stylesheets/bundle.css",
   "autoprefixer": {
     "browsers": "last 2 versions"
   }
