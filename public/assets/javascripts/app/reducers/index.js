@@ -1,22 +1,32 @@
 import { createReducer } from 'redux-act';
-// import {
-//   login, logout, addUser, removeUser, newMessage
-// } from './actions';
+import { login, logout } from '../actions/session';
 
 const initial = {
-  app: {
-    username: null
-  },
-  users: {},
-  messages: {
-    list: [],
-    entities: {}
-  },
+  session: {
+    logined: false,
+    user: {
+      id: undefined,
+      user_id: undefined,
+      name: undefined,
+      pass: undefined
+    }
+  }
 };
 
-const app = createReducer({
+const session = createReducer({
+  [login]: (state, payload) => Object.assign({}, state, {
+    logined: true,
+    user: {
+      id: payload.id,
+      user_id: payload.user_id,
+      name: payload.user_name,
+      pass: payload.pass
+    }
+  }),
+  [logout]: () => initial.session
+}, initial.session);
 
-}, initial.app);
+export default { session };
 
 // const users = createReducer({
 //   [addUser]: (state, payload) => {
@@ -39,5 +49,3 @@ const app = createReducer({
 //     };
 //   }
 // }, initial.messages);
-
-export default { app };

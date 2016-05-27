@@ -1,3 +1,44 @@
 /*-------------------------------------//
 //  Header
 //-------------------------------------*/
+
+.header {
+  padding: 10px;
+  background-color: #222;
+  color: #fff;
+  line-height: 18px;
+}
+.header__logo { font-size: $font-size-l; }
+.header__info { position: relative; }
+.header__info__user:not(:empty) {
+  cursor: pointer;
+  user-select: none;
+
+  &:after {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: $font-size-xs;
+    content: "▼";
+  }
+}
+.header__info__dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  display: none;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+  background-color: #fff;
+  color: #222;
+
+  &.is-active { display: block; }
+}
+.header__info__dropdown__list { padding: 5px 0; }
+.header__info__dropdown__link {
+  display: block;
+  min-width: 150px;
+  padding: 8px 12px;
+  font-size: $font-size-s;
+
+  &:hover { background-color: #f7f8f9; }
+}
