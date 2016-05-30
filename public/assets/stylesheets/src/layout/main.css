@@ -2,9 +2,11 @@
 //  Main
 //-------------------------------------*/
 
+#app,
+.container { height: 100%; }
 .wrapper {
   display: flex;
-  height: 100%;
+  height: calc(100% - 38px);
 }
 .main {
   flex: 1;

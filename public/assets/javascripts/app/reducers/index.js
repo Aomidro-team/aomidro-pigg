@@ -1,30 +1,4 @@
-import { createReducer } from 'redux-act';
-import { login, logout } from '../actions/session';
-
-const initial = {
-  session: {
-    logined: false,
-    user: {
-      id: undefined,
-      user_id: undefined,
-      name: undefined,
-      pass: undefined
-    }
-  }
-};
-
-const session = createReducer({
-  [login]: (state, payload) => Object.assign({}, state, {
-    logined: true,
-    user: {
-      id: payload.id,
-      user_id: payload.user_id,
-      name: payload.user_name,
-      pass: payload.pass
-    }
-  }),
-  [logout]: () => initial.session
-}, initial.session);
+import session from './session';
 
 export default { session };
 

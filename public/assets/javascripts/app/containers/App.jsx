@@ -19,13 +19,13 @@ class App extends Component {
     const { children, session } = this.props;
 
     return (
-      <div onClick={() => { this.setState({ dropdownIsVisible: false }); }}>
+      <div className="container" onClick={() => { this.setState({ dropdownIsVisible: false }); }}>
         <Header
           session={session}
           dropdownIsVisible={this.state.dropdownIsVisible}
           handleBtnClick={::this.handleBtnClick}
         />
-      {children}
+        {children}
       </div>
     );
   }

@@ -31,6 +31,3 @@ render(
   </Provider>,
   document.getElementById('app')
 );
-
-// <IndexRoute component={Dashboard} />
-// <Route path="/*" />

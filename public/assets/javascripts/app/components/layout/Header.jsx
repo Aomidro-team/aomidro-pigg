@@ -14,24 +14,22 @@ class Header extends Component {
 
   render() {
     return (
-      <div>
-        <header className="header u-cf">
-          <p className="header__logo u-fl">
-            <Link to="/">AomidroPigg</Link>
-          </p>
+      <header className="header u-cf">
+        <p className="header__logo u-fl">
+          <Link to="/">AomidroPigg</Link>
+        </p>
 
-          <div className="header__info u-fr">
-            {this.renderUserId()}
+        <div className="header__info u-fr">
+          {this.renderUserId()}
 
-            <div className={this.props.dropdownIsVisible ? 'header__info__dropdown is-active' : 'header__info__dropdown'}>
-              <ul className="header__info__dropdown__list">
-                <li><Link className="header__info__dropdown__link" to="/profile">Profile</Link></li>
-                <li><Link className="header__info__dropdown__link" to="/logout">Logout</Link></li>
-              </ul>
-            </div>
+          <div className={this.props.dropdownIsVisible ? 'header__info__dropdown is-active' : 'header__info__dropdown'}>
+            <ul className="header__info__dropdown__list">
+              <li><Link className="header__info__dropdown__link" to="/profile">Profile</Link></li>
+              <li><Link className="header__info__dropdown__link" to="/logout">Logout</Link></li>
+            </ul>
           </div>
-        </header>
-      </div>
+        </div>
+      </header>
     );
   }
 }

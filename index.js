@@ -5,9 +5,12 @@ const handlebars = require('handlebars');
 const inert = require('inert');
 
 const server = new Hapi.Server();
+
 const routes = require('./app/routes');
+const users = require('./app/api/users');
 const routings = [
-  ...routes
+  ...routes,
+  ...users
 ];
 
 
