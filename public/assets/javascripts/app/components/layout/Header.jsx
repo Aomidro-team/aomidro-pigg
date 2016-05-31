@@ -6,10 +6,10 @@ class Header extends Component {
     const { session, handleBtnClick } = this.props;
 
     if (session.logined) {
-      return <p className="header__info__user" onClick={handleBtnClick}>{session.user.user_id}</p>;
+      return <p className="header__info__user" onClick={handleBtnClick}>{session.user.userId}</p>;
     }
 
-    return false;
+    return <Link className="header__info__signup" to="/signup">Sign Up</Link>;
   }
 
   render() {
@@ -25,7 +25,7 @@ class Header extends Component {
           <div className={this.props.dropdownIsVisible ? 'header__info__dropdown is-active' : 'header__info__dropdown'}>
             <ul className="header__info__dropdown__list">
               <li><Link className="header__info__dropdown__link" to="/profile">Profile</Link></li>
-              <li><Link className="header__info__dropdown__link" to="/logout">Logout</Link></li>
+              <li><span className="header__info__dropdown__link" onClick={this.props.handleLogout}>Logout</span></li>
             </ul>
           </div>
         </div>
@@ -37,7 +37,8 @@ class Header extends Component {
 Header.propTypes = {
   session: PropTypes.object.isRequired,
   dropdownIsVisible: PropTypes.bool.isRequired,
-  handleBtnClick: PropTypes.func.isRequired
+  handleBtnClick: PropTypes.func.isRequired,
+  handleLogout: PropTypes.func.isRequired
 };
 
 export default Header;

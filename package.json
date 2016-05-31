@@ -26,10 +26,13 @@
   },
   "homepage": "https://github.com/AomidroPigg/aomidro-pigg#readme",
   "dependencies": {
+    "boom": "^3.2.1",
     "config": "^1.20.4",
+    "crypt": "0.0.1",
     "handlebars": "^4.0.5",
     "hapi": "^13.4.1",
     "inert": "^4.0.0",
+    "moment": "^2.13.0",
     "mysql": "^2.10.2",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",

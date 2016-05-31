@@ -24,11 +24,9 @@
   font-size: calc($font-size-xl + 4px);
   text-align: center;
 }
-.p-auth__form {
-  width: 300px;
-  margin-bottom: 20px;
-}
-.p-auth__form > li:not(:first-child) { margin-top: 20px; }
+.p-auth__form { width: 300px; }
+.p-auth__form__list { margin-bottom: 20px; }
+.p-auth__form__list > li:not(:first-child) { margin-top: 20px; }
 .p-auth__form__title {
   margin-bottom: 10px;
   color: #7f7f7f;
@@ -53,4 +51,6 @@
 .p-auth__error:not(:empty) {
   margin-bottom: 20px;
   color: #E45858;
+  font-size: $font-size-s;
+  line-height: 18px;
 }

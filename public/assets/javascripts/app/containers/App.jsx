@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import Header from '../components/layout/Header';
+import { logout } from '../actions/session';
 
 class App extends Component {
   constructor(props) {
@@ -15,6 +16,10 @@ class App extends Component {
     this.setState({ dropdownIsVisible: !this.state.dropdownIsVisible });
   }
 
+  handleLogout() {
+    this.props.dispatch(logout());
+  }
+
   render() {
     const { children, session } = this.props;
 
@@ -24,6 +29,7 @@ class App extends Component {
           session={session}
           dropdownIsVisible={this.state.dropdownIsVisible}
           handleBtnClick={::this.handleBtnClick}
+          handleLogout={::this.handleLogout}
         />
         {children}
       </div>
@@ -32,6 +38,7 @@ class App extends Component {
 }
 
 App.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   children: PropTypes.object.isRequired,
   session: PropTypes.object.isRequired
 };

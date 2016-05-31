@@ -10,7 +10,7 @@ const dbConfig = {
 };
 
 const connection = mysql.createConnection(dbConfig);
-const exec = query => new Promise((resolve, reject) => {
+const execute = query => new Promise((resolve, reject) => {
   connection.query(query, (err, results) => {
     if (err) {
       reject(err);
@@ -20,4 +20,4 @@ const exec = query => new Promise((resolve, reject) => {
   });
 });
 
-module.exports = { connection, exec };
+module.exports = execute;

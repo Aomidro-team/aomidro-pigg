@@ -9,8 +9,8 @@ import App from './containers/App';
 import UserOnly from './containers/auth/UserOnly';
 import GuestOnly from './containers/auth/GuestOnly';
 import Index from './containers/Index';
-import Logout from './containers/auth/Logout';
 import Login from './containers/auth/Login';
+import Signup from './containers/auth/Signup';
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
@@ -21,10 +21,10 @@ render(
       <Route path="/" component={App}>
         <Route component={UserOnly}>
           <IndexRoute component={Index} />
-          <Route path="/logout" component={Logout} />
         </Route>
         <Route component={GuestOnly}>
           <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
         </Route>
       </Route>
     </Router>

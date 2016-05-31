@@ -7,9 +7,11 @@ const inert = require('inert');
 const server = new Hapi.Server();
 
 const routes = require('./app/routes');
+const login = require('./app/api/login');
 const users = require('./app/api/users');
 const routings = [
   ...routes,
+  ...login,
   ...users
 ];
 

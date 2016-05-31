@@ -1,5 +1,5 @@
 import { createReducer } from 'redux-act';
-import { fetchUser, login, logout } from '../actions/session';
+import { fetchUser, failureFetchUser, login, logout, signup, failureSignup } from '../actions/session';
 
 const initial = {
   session: {
@@ -16,20 +16,31 @@ const initial = {
 };
 
 const session = createReducer({
-  [fetchUser]: (state) => Object.assign({}, state, {
+  [fetchUser]: state => Object.assign({}, state, {
     isFetching: true,
     error: null
+  }),
+  [failureFetchUser]: (state, err) => Object.assign({}, state, {
+    isFetching: false,
+    error: err
   }),
   [login]: (state, payload) => Object.assign({}, state, {
     logined: true,
     user: {
       id: payload.id,
-      userId: payload.userId,
-      name: payload.user_name,
-      pass: payload.pass
-    }
+      userId: payload.user_id,
+      name: payload.name,
+      pass: payload.password
+    },
+    isFetching: false,
+    error: null
   }),
-  [logout]: () => initial.session
+  [logout]: () => initial.session,
+  [signup]: state => Object.assign({}, state, { isFetching: true }),
+  [failureSignup]: (state, err) => Object.assign({}, state, {
+    isFetching: false,
+    error: err
+  })
 }, initial.session);
 
 export default session;

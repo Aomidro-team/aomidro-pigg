@@ -39,6 +39,20 @@
   min-width: 150px;
   padding: 8px 12px;
   font-size: $font-size-s;
+  cursor: pointer;
 
   &:hover { background-color: #f7f8f9; }
 }
+.header__info__signup {
+  position: absolute;
+  top: -4px;
+  right: 0;
+  width: 65px;
+  padding: 4px 0;
+  background-color: #2244aa;
+  font-size: $font-size-ss;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color .4s;
+}
+.header__info__signup:hover { background-color: #2270AA; }
