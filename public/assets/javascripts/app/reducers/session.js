@@ -11,14 +11,14 @@ const initial = {
       pass: undefined
     },
     isFetching: false,
-    error: null
+    error: undefined
   }
 };
 
 const session = createReducer({
   [fetchUser]: state => Object.assign({}, state, {
     isFetching: true,
-    error: null
+    error: undefined
   }),
   [failureFetchUser]: (state, err) => Object.assign({}, state, {
     isFetching: false,
@@ -33,7 +33,7 @@ const session = createReducer({
       pass: payload.password
     },
     isFetching: false,
-    error: null
+    error: undefined
   }),
   [logout]: () => initial.session,
   [signup]: state => Object.assign({}, state, { isFetching: true }),

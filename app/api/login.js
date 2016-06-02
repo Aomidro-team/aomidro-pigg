@@ -34,9 +34,7 @@ module.exports = [
 
         return reply(results);
       })
-      .catch(err => {
-        throw err;
-      });
+      .catch(err => reply(Boom.badImplementation(String(err))));
     }
   }
 ];

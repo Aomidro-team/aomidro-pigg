@@ -3,58 +3,31 @@ const moment = require('moment');
 const encrypt = require('../encrypt');
 const execute = require('../mysqlConnection');
 
-const fetchUserByUserId = userId => new Promise((resolve, reject) => {
-  const query = `
+const query = {
+  fetchUserByUserId: userId => `
     SELECT
       *
     FROM
       users
     WHERE
-      user_id = "${userId}"`;
-
-  execute(query)
-  .then(results => {
-    resolve(results);
-  })
-  .catch(err => {
-    reject(err);
-  });
-});
-
-const fetchUserByMail = mail => new Promise((resolve, reject) => {
-  const query = `
+      user_id = "${userId}"`,
+  fetchUserByMail: mail => `
     SELECT
       *
     FROM
       users
     WHERE
-      mail = "${mail}"`;
+      mail = "${mail}"`,
+  registerUser: payload => {
+    const current = moment().format('YYYY-MM-DD HH:mm:ss');
 
-  execute(query)
-  .then(results => {
-    resolve(results);
-  })
-  .catch(err => {
-    reject(err);
-  });
-});
-
-const registerUser = payload => new Promise((resolve, reject) => {
-  const current = moment().format('YYYY-MM-DD HH:mm:ss');
-  const query = `
-    INSERT INTO
-      users (user_id, name, password, mail, created_at, updated_at)
-    VALUES
-      ("${payload.userId}", "${payload.name}", "${encrypt(payload.pass)}", "${payload.mail}", "${current}", "${current}")`;
-
-  execute(query)
-  .then(results => {
-    resolve(results);
-  })
-  .catch(err => {
-    reject(err);
-  });
-});
+    return `
+      INSERT INTO
+        users (user_id, name, password, mail, created_at, updated_at)
+      VALUES
+        ("${payload.userId}", "${payload.name}", "${encrypt(payload.pass)}", "${payload.mail}", "${current}", "${current}")`;
+  }
+};
 
 module.exports = [
   {
@@ -64,8 +37,8 @@ module.exports = [
       const payload = request.payload;
 
       Promise.all([
-        fetchUserByUserId(payload.userId),
-        fetchUserByMail(payload.mail)
+        execute(query.fetchUserByUserId(payload.userId)),
+        execute(query.fetchUserByMail(payload.mail))
       ])
       .then(res => {
         const userIdIsExist = res[0].length !== 0;
@@ -94,7 +67,7 @@ module.exports = [
           return reply(err);
         }
 
-        return registerUser(payload);
+        return execute(query.registerUser(payload));
       })
       .then(res => reply(res))
       .catch(err => reply(Boom.badImplementation(String(err))));
