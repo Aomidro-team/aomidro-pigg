@@ -97,9 +97,7 @@ module.exports = [
         return registerUser(payload);
       })
       .then(res => reply(res))
-      .catch(err => {
-        throw err;
-      });
+      .catch(err => reply(Boom.badImplementation(String(err))));
     }
   }
 ];
