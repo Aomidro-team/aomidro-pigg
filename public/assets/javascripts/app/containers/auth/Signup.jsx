@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { signup } from '../../actions/session';
-import Loading from '../../components/loading';
+import Loading from '../../components/Loading';
 
 class Signup extends Component {
   handleSubmit(e) {
@@ -19,14 +19,14 @@ class Signup extends Component {
   }
 
   renderSubmit() {
-    const styles = {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '40px'
-    };
-
     if (this.props.session.isFetching) {
+      const styles = {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '40px'
+      };
+
       return (
         <div style={styles}>
           <Loading />

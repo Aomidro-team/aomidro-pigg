@@ -1,8 +1,18 @@
 import { createReducer } from 'redux-act';
-import { fetchUser, failureFetchUser, login, logout, signup, failureSignup } from '../actions/session';
+import {
+  fetchUser,
+  failureFetchUser,
+  login,
+  logout,
+  signup,
+  failureSignup,
+  failureSetUser
+} from '../actions/session';
+import operateCookie from '../modules/operateCookie';
 
 const initial = {
   session: {
+    init: false,
     logined: false,
     user: {
       id: undefined,
@@ -25,6 +35,7 @@ const session = createReducer({
     error: err
   }),
   [login]: (state, payload) => Object.assign({}, state, {
+    init: false,
     logined: true,
     user: {
       id: payload.id,
@@ -40,7 +51,12 @@ const session = createReducer({
   [failureSignup]: (state, err) => Object.assign({}, state, {
     isFetching: false,
     error: err
+  }),
+  [failureSetUser]: state => Object.assign({}, state, {
+    init: false
   })
-}, initial.session);
+}, Object.assign({}, initial.session, {
+  init: !!operateCookie.get('sid')
+}));
 
 export default session;

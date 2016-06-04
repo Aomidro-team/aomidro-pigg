@@ -11,9 +11,14 @@ const handleErrors = res => {
 };
 
 const superFetch = req => {
+  let reqUrl = req.url;
   const reqObj = {
     method: req.type
   };
+
+  if (req.type === 'GET' || req.type === 'DELETE') {
+    reqUrl += `${req.data}/`;
+  }
 
   if (req.type === 'POST') {
     reqObj.headers = {
@@ -23,7 +28,7 @@ const superFetch = req => {
     reqObj.body = JSON.stringify(req.data);
   }
 
-  return fetch(req.url, reqObj)
+  return fetch(reqUrl, reqObj)
     .then(handleErrors)
     .then(payload => ({ payload }))
     .catch(err => ({ err }));
