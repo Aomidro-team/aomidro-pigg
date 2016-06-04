@@ -46,6 +46,7 @@ server.register(inert, err => {
   }
 });
 
+
 // routing
 server.route(routings);
 
