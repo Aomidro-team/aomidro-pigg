@@ -1,10 +1,17 @@
 import { fork } from 'redux-saga/effects';
-import { handleSetUser, handleSessionLogin, handleLogin, handleClickLogout, handleSignup } from './session';
+import {
+  handleFetchLoginState,
+  handleLogin,
+  handleLogout
+} from './auth';
 
 export default function* rootSaga() {
-  yield fork(handleSetUser);
-  yield fork(handleSessionLogin);
+  yield fork(handleFetchLoginState);
   yield fork(handleLogin);
-  yield fork(handleClickLogout);
-  yield fork(handleSignup);
+  yield fork(handleLogout);
+
+  // yield fork(handleSessionLogin);
+  // yield fork(handleLogin);
+  // yield fork(handleClickLogout);
+  // yield fork(handleSignup);
 }

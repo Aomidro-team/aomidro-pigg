@@ -48,7 +48,7 @@
   transition: background-color .4s;
 }
 .p-auth__submit:hover { background-color: #2270AA; }
-.p-auth__error:not(:empty) {
+.p-auth__error {
   margin-bottom: 20px;
   color: #E45858;
   font-size: $font-size-s;

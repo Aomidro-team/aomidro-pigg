@@ -1,3 +1,3 @@
-import session from './session';
+import auth from './auth';
 
-export default { session };
+export default { auth };

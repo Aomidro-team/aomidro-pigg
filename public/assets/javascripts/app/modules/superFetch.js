@@ -12,19 +12,17 @@ const handleErrors = res => {
 
 const superFetch = req => {
   let reqUrl = req.url;
-  const reqObj = {
-    method: req.type
-  };
+  const custom = req.custom || {};
+  const reqObj = Object.assign({}, custom, { method: req.type });
 
   if (req.type === 'GET' || req.type === 'DELETE') {
     reqUrl += `${req.data}/`;
   }
 
   if (req.type === 'POST') {
-    reqObj.headers = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    };
+    reqObj.headers = reqObj.headers || {};
+    reqObj.headers.Accept = 'application/json';
+    reqObj.headers['Content-Type'] = 'application/json';
     reqObj.body = JSON.stringify(req.data);
   }
 

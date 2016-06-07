@@ -6,7 +6,7 @@
 .container { height: 100%; }
 .wrapper {
   display: flex;
-  height: calc(100% - 38px);
+  height: calc(100% - $header-height);
 }
 .main {
   flex: 1;

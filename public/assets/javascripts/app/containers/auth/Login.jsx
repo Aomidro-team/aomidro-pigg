@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { fetchUser } from '../../actions/session';
+import { fetchUser } from '../../actions/auth';
 import Loading from '../../components/Loading';
 
 class Login extends Component {
@@ -11,13 +11,13 @@ class Login extends Component {
     e.preventDefault();
 
     this.props.dispatch(fetchUser({
-      userId: target.userId.value,
-      pass: target.password.value
+      userId: target.userId.value.trim(),
+      pass: target.password.value.trim()
     }));
   }
 
   renderSubmit() {
-    if (this.props.session.isFetching) {
+    if (this.props.auth.isFetching) {
       const styles = {
         display: 'flex',
         justifyContent: 'center',
@@ -36,6 +36,8 @@ class Login extends Component {
   }
 
   render() {
+    const { auth } = this.props;
+
     return (
       <div className="p-auth__wrapper">
         <div className="p-auth__inner">
@@ -53,7 +55,9 @@ class Login extends Component {
               </li>
             </ul>
 
-            <p className="p-auth__error">{this.props.session.error}</p>
+            {auth.error &&
+              <p className="p-auth__error">{auth.error}</p>
+            }
 
             {this.renderSubmit()}
           </form>
@@ -65,11 +69,11 @@ class Login extends Component {
 
 Login.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  session: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired
 };
 
-function select({ session }) {
-  return { session };
+function select({ auth }) {
+  return { auth };
 }
 
 export default connect(select)(Login);

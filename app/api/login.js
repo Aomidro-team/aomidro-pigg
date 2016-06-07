@@ -1,11 +1,8 @@
 const Boom = require('boom');
-const uuid = require('node-uuid');
 const encrypt = require('../encrypt');
 const execute = require('../mysqlConnection');
 
-let loginUsers = [];
-
-module.exports = [
+module.exports = jwt => [
   {
     path: '/api/login/',
     method: 'POST',
@@ -14,7 +11,7 @@ module.exports = [
       const pass = encrypt(request.payload.pass);
       const query = `
         SELECT
-          id, user_id, name, password, mail
+          id, user_id, name, mail
         FROM
          users
         WHERE
@@ -35,71 +32,30 @@ module.exports = [
           return reply(err);
         }
 
-        const sid = uuid.v4();
-        loginUsers.push({
-          sid,
-          id: results[0].id
-        });
+        const account = results[0];
+        const accessToken = request.headers.authorization;
+        const jsonWebToken = jwt.sign(Object.assign({}, account, { accessToken }), accessToken);
 
-        return reply([Object.assign({}, results[0], { sid })]);
+        return reply([Object.assign({}, account, { jsonWebToken })]);
       })
       .catch(err => reply(Boom.badImplementation(String(err))));
     }
   },
   {
-    path: '/api/session/{sid*}',
+    path: '/api/login/{token*}',
     method: 'GET',
     handler: (request, reply) => {
-      const sid = request.params.sid.split('/')[0];
-      const loginUserId = loginUsers.filter(user => user.sid === sid)[0].id;
+      const params = JSON.parse(request.params.token.split('/')[0]);
+      const jsonWebToken = params.jwt;
+      const accessToken = params.accessToken;
 
-      if (loginUserId) {
-        return reply([loginUserId]);
-      }
+      jwt.verify(jsonWebToken, accessToken, (err, decode) => {
+        if (err) {
+          reply(Boom.badImplementation(String(err)));
+        }
 
-      return reply(Boom.badImplementation('loginUserId is not found'));
-    }
-  },
-  {
-    path: '/api/session/',
-    method: 'POST',
-    handler: (request, reply) => {
-      const sid = request.payload.sid;
-      const id = request.payload.id;
-      const loginUserId = loginUsers.filter(user => user.sid === sid)[0].id;
-
-      if (loginUserId === id) {
-        const query = `
-          SELECT
-            id, user_id, name, password, mail
-          FROM
-           users
-          WHERE
-            id = "${id}"`;
-
-        return execute(query)
-        .then(results => {
-          if (!results.length) {
-            return reply(Boom.badImplementation('Invalid error'));
-          }
-
-          return reply(results);
-        })
-        .catch(err => reply(Boom.badImplementation(err)));
-      }
-
-      return reply(Boom.badImplementation('Invalid error'));
-    }
-  },
-  {
-    path: '/api/session/{id*}',
-    method: 'DELETE',
-    handler: (request, reply) => {
-      const id = request.params.id.split('/')[0];
-
-      loginUsers = loginUsers.filter(user => user.id !== id);
-
-      return reply.continue();
+        return reply([Object.assign({}, decode, { jsonWebToken })]);
+      });
     }
   }
 ];

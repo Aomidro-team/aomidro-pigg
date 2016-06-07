@@ -9,6 +9,7 @@
   "scripts": {
     "start": "babel-node ./index.js",
     "dev": "DEBUG=aomidro-pigg:* npm start",
+    "build": "npm run build-css && npm run build-js",
     "lint": "eslint **/*.js",
     "build-css": "postcss -c ./.postcssrc.json",
     "watch-css": "postcss -c ./.postcssrc.json -w --map",
@@ -31,7 +32,9 @@
     "crypt": "0.0.1",
     "handlebars": "^4.0.5",
     "hapi": "^13.4.1",
+    "hapi-auth-jwt2": "^7.0.1",
     "inert": "^4.0.0",
+    "jsonwebtoken": "^7.0.0",
     "moment": "^2.13.0",
     "mysql": "^2.10.2",
     "node-uuid": "^1.4.7",

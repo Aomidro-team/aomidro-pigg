@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import operateCookie from '../modules/operateCookie';
+
+import { fetchLoginState, clickLogout } from '../actions/auth';
 
 import Header from '../components/layout/Header';
 import Loading from '../components/Loading';
-import { clickLogout, setUser } from '../actions/session';
 
 class App extends Component {
   constructor(props) {
@@ -14,9 +14,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    if (this.props.session.init) {
-      this.props.dispatch(setUser(operateCookie.get('sid')));
-    }
+    this.props.dispatch(fetchLoginState());
   }
 
   handleBtnClick(e) {
@@ -25,13 +23,13 @@ class App extends Component {
   }
 
   handleLogout() {
-    this.props.dispatch(clickLogout({ id: this.props.session.user.id }));
+    this.props.dispatch(clickLogout());
   }
 
   render() {
-    const { children, session } = this.props;
+    const { children, auth } = this.props;
 
-    if (session.init) {
+    if (!auth.isPrepared) {
       const styles = {
         display: 'flex',
         justifyContent: 'center',
@@ -49,7 +47,7 @@ class App extends Component {
     return (
       <div className="container" onClick={() => { this.setState({ dropdownIsVisible: false }); }}>
         <Header
-          session={session}
+          auth={auth}
           dropdownIsVisible={this.state.dropdownIsVisible}
           handleBtnClick={::this.handleBtnClick}
           handleLogout={::this.handleLogout}
@@ -63,11 +61,11 @@ class App extends Component {
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
   children: PropTypes.object.isRequired,
-  session: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired
 };
 
-function select({ session }) {
-  return { session };
+function select({ auth }) {
+  return { auth };
 }
 
 export default connect(select)(App);

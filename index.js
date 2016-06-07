@@ -3,6 +3,7 @@ const config = require('config');
 const vision = require('vision');
 const handlebars = require('handlebars');
 const inert = require('inert');
+const jwt = require('jsonwebtoken');
 
 const server = new Hapi.Server();
 
@@ -11,7 +12,7 @@ const login = require('./app/api/login');
 const users = require('./app/api/users');
 const routings = [
   ...routes,
-  ...login,
+  ...login(jwt),
   ...users
 ];
 
