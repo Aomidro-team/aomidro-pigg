@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
-import { signup } from '../../actions/session';
-import Loading from '../../components/Loading';
+import AuthBase from './AuthBase';
+import { signup } from '../../actions/auth';
 
-class Signup extends Component {
+class Signup extends AuthBase {
   handleSubmit(e) {
     const target = e.target;
 
@@ -18,26 +18,9 @@ class Signup extends Component {
     }));
   }
 
-  renderSubmit() {
-    if (this.props.session.isFetching) {
-      const styles = {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '40px'
-      };
-
-      return (
-        <div style={styles}>
-          <Loading />
-        </div>
-      );
-    }
-
-    return <input className="p-auth__submit u-hover" type="submit" value="Send" />;
-  }
-
   render() {
+    const { auth } = this.props;
+
     return (
       <div className="p-auth__wrapper">
         <div className="p-auth__inner">
@@ -63,7 +46,9 @@ class Signup extends Component {
               </li>
             </ul>
 
-            <p className="p-auth__error">{this.props.session.error}</p>
+            {auth.error &&
+              <p className="p-auth__error">{auth.error}</p>
+            }
 
             {this.renderSubmit()}
           </form>
@@ -73,13 +58,8 @@ class Signup extends Component {
   }
 }
 
-Signup.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  session: PropTypes.object.isRequired
-};
-
-function select({ session }) {
-  return { session };
+function select({ auth }) {
+  return { auth };
 }
 
 export default connect(select)(Signup);

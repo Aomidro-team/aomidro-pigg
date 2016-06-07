@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
+import AuthBase from './AuthBase';
 import { fetchUser } from '../../actions/auth';
-import Loading from '../../components/Loading';
 
-class Login extends Component {
+class Login extends AuthBase {
   handleSubmit(e) {
     const target = e.target;
 
@@ -14,25 +14,6 @@ class Login extends Component {
       userId: target.userId.value.trim(),
       pass: target.password.value.trim()
     }));
-  }
-
-  renderSubmit() {
-    if (this.props.auth.isFetching) {
-      const styles = {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '40px'
-      };
-
-      return (
-        <div style={styles}>
-          <Loading />
-        </div>
-      );
-    }
-
-    return <input className="p-auth__submit u-hover" type="submit" value="Send" />;
   }
 
   render() {
@@ -66,11 +47,6 @@ class Login extends Component {
     );
   }
 }
-
-Login.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
-};
 
 function select({ auth }) {
   return { auth };

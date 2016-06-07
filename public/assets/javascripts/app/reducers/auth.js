@@ -4,7 +4,9 @@ import {
   fetchUser,
   failFetchingUser,
   login,
-  logout
+  logout,
+  signup,
+  failSignup
 } from '../actions/auth';
 
 const initial = {
@@ -52,21 +54,15 @@ const auth = createReducer({
   }),
   [logout]: () => Object.assign({}, initial.auth, {
     isPrepared: true
+  }),
+  [signup]: state => Object.assign({}, state, {
+    isFetching: true,
+    error: undefined
+  }),
+  [failSignup]: (state, err) => Object.assign({}, state, {
+    isFetching: false,
+    error: err
   })
 }, initial.auth);
-
-// const session = createReducer({
-//   [logout]: () => initial.session,
-//   [signup]: state => Object.assign({}, state, { isFetching: true }),
-//   [failureSignup]: (state, err) => Object.assign({}, state, {
-//     isFetching: false,
-//     error: err
-//   }),
-//   [failureSetUser]: state => Object.assign({}, state, {
-//     init: false
-//   })
-// }, Object.assign({}, initial.session, {
-//   init: !!operateCookie.get('sid')
-// }));
 
 export default auth;

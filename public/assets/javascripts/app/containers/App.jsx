@@ -11,6 +11,7 @@ class App extends Component {
     super(props);
 
     this.state = { dropdownIsVisible: false };
+    console.log(this.props);
   }
 
   componentWillMount() {
@@ -27,7 +28,7 @@ class App extends Component {
   }
 
   render() {
-    const { children, auth } = this.props;
+    const { children, auth, location } = this.props;
 
     if (!auth.isPrepared) {
       const styles = {
@@ -48,6 +49,7 @@ class App extends Component {
       <div className="container" onClick={() => { this.setState({ dropdownIsVisible: false }); }}>
         <Header
           auth={auth}
+          pathname={location.pathname}
           dropdownIsVisible={this.state.dropdownIsVisible}
           handleBtnClick={::this.handleBtnClick}
           handleLogout={::this.handleLogout}
@@ -61,7 +63,8 @@ class App extends Component {
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
   children: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired
 };
 
 function select({ auth }) {

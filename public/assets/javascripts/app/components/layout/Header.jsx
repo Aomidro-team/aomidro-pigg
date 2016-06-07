@@ -2,15 +2,21 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 class Header extends Component {
-  renderUserId() {
-    const { auth, handleBtnClick } = this.props;
+  renderInfo() {
+    const { auth, pathname, handleBtnClick } = this.props;
+    let el = undefined;
 
     if (auth.isLoggedIn) {
-      return <p className="header__info__user" onClick={handleBtnClick}>{auth.user.userId}</p>;
+      el = <p className="header__info__user" onClick={handleBtnClick}>{auth.user.userId}</p>;
     }
 
-    // TODO: chnge 'sign up' or 'login'
-    return <Link className="header__info__signup" to="/signup">Sign Up</Link>;
+    if (pathname === '/login') {
+      el = <Link className="header__info__btn" to="/signup">Sign Up</Link>;
+    } else if (pathname === '/signup') {
+      el = <Link className="header__info__btn" to="/login">Login</Link>;
+    }
+
+    return el;
   }
 
   render() {
@@ -23,7 +29,7 @@ class Header extends Component {
         </p>
 
         <div className="header__info u-fr">
-          {this.renderUserId()}
+          {this.renderInfo()}
 
           <div className={dropdownIsVisible ? 'header__info__dropdown is-active' : 'header__info__dropdown'}>
             <ul className="header__info__dropdown__list">
@@ -39,6 +45,7 @@ class Header extends Component {
 
 Header.propTypes = {
   auth: PropTypes.object.isRequired,
+  pathname: PropTypes.string.isRequired,
   dropdownIsVisible: PropTypes.bool.isRequired,
   handleBtnClick: PropTypes.func.isRequired,
   handleLogout: PropTypes.func.isRequired
