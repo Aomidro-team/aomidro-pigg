@@ -11,10 +11,10 @@ class Signup extends AuthBase {
     e.preventDefault();
 
     this.props.dispatch(signup({
-      userId: target.userId.value,
-      name: target.name.value,
-      mail: target.mail.value,
-      pass: target.password.value
+      userId: target.userId.value.trim(),
+      name: target.name.value.trim(),
+      mail: target.mail.value.trim(),
+      pass: target.password.value.trim()
     }));
   }
 
@@ -38,7 +38,7 @@ class Signup extends AuthBase {
               </li>
               <li>
                 <p className="p-auth__form__title">Mail</p>
-                <p><input className="p-auth__input" type="text" name="mail" required /></p>
+                <p><input className="p-auth__input" type="email" name="mail" required /></p>
               </li>
               <li>
                 <p className="p-auth__form__title">Password</p>

@@ -11,7 +11,6 @@ class App extends Component {
     super(props);
 
     this.state = { dropdownIsVisible: false };
-    console.log(this.props);
   }
 
   componentWillMount() {

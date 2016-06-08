@@ -15,7 +15,7 @@ const superFetch = req => {
   const custom = req.custom || {};
   const reqObj = Object.assign({}, custom, { method: req.type });
 
-  if (req.type === 'GET' || req.type === 'DELETE') {
+  if ((req.type === 'GET' || req.type === 'DELETE') && req.data) {
     reqUrl += `${req.data}/`;
   }
 

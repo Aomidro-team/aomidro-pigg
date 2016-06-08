@@ -1,6 +1,30 @@
 const Boom = require('boom');
 const encrypt = require('../encrypt');
 const execute = require('../mysqlConnection');
+const secretKey = require('config').get('secretKey');
+
+const query = {
+  fetchUserByUserIdAndPass: (userId, pass) => `
+    SELECT
+      id, user_id, name, mail
+    FROM
+     users
+    WHERE
+      user_id = "${userId}"
+    AND
+      password = "${pass}"
+    AND
+      deleted_at IS NULL`,
+  fetchUserById: id => `
+    SELECT
+      id, user_id, name, mail
+    FROM
+      users
+    WHERE
+      id = "${id}"
+    AND
+      deleted_at IS NULL`
+};
 
 module.exports = jwt => [
   {
@@ -9,19 +33,8 @@ module.exports = jwt => [
     handler: (request, reply) => {
       const userId = request.payload.userId;
       const pass = encrypt(request.payload.pass);
-      const query = `
-        SELECT
-          id, user_id, name, mail
-        FROM
-         users
-        WHERE
-          user_id = "${userId}"
-        AND
-          password = "${pass}"
-        AND
-          deleted_at IS NULL`;
 
-      execute(query)
+      execute(query.fetchUserByUserIdAndPass(userId, pass))
       .then(results => {
         if (!results.length) {
           const err = Boom.badImplementation('userId or password is not found', {
@@ -33,8 +46,10 @@ module.exports = jwt => [
         }
 
         const account = results[0];
-        const accessToken = request.headers.authorization;
-        const jsonWebToken = jwt.sign(Object.assign({}, account, { accessToken }), accessToken);
+        const jsonWebToken = jwt.sign({
+          id: account.id,
+          mail: account.mail
+        }, secretKey);
 
         return reply([Object.assign({}, account, { jsonWebToken })]);
       })
@@ -42,19 +57,25 @@ module.exports = jwt => [
     }
   },
   {
-    path: '/api/login/{token*}',
+    path: '/api/login/',
     method: 'GET',
     handler: (request, reply) => {
-      const params = JSON.parse(request.params.token.split('/')[0]);
-      const jsonWebToken = params.jwt;
-      const accessToken = params.accessToken;
+      const jsonWebToken = request.headers.authorization.split(' ')[1];
 
-      jwt.verify(jsonWebToken, accessToken, (err, decode) => {
+      jwt.verify(jsonWebToken, secretKey, (err, decode) => {
         if (err) {
           reply(Boom.badImplementation(String(err)));
         }
 
-        return reply([Object.assign({}, decode, { jsonWebToken })]);
+        execute(query.fetchUserById(decode.id))
+        .then(results => {
+          if (!results.length) {
+            return reply(Boom.badImplementation('User is not found'));
+          }
+
+          return reply(results);
+        })
+        .catch(error => reply(Boom.badImplementation(String(error))));
       });
     }
   }

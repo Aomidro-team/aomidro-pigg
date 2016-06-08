@@ -9,7 +9,7 @@
 }
 .p-chat__inner {
   overflow-y: scroll;
-  height: calc(100vh - 58px);
+  height: calc(100vh - 58px - $header-height);
   padding: 10px;
 }
 .p-chat__box {

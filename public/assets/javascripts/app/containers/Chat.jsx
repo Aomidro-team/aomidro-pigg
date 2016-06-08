@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
-export default class ChatView extends Component {
+import { enterChat } from '../actions/chat';
+
+class ChatView extends Component {
   // constructor(props) {
     // super(props);
 
@@ -23,6 +26,12 @@ export default class ChatView extends Component {
     // props.store.on('changeInputingUsers', this.onChangeInputingUsers.bind(this));
     // window.addEventListener('beforeunload', props.action.disconnectChat.bind(props.action));
   // }
+
+  componentWillMount() {
+    const { dispatch, auth } = this.props;
+    const { accessToken } = auth;
+    dispatch(enterChat({ accessToken }));
+  }
 
   // componentWillUpdate() {
     // const scroll = document.querySelector('.js-chat-scroll');
@@ -47,24 +56,24 @@ export default class ChatView extends Component {
   //   this.setState({ isInputing: this.props.store.getInputingUsers() });
   // }
 
-  // hundleSubmit(e) {
-  //   e.preventDefault();
+  hundleSubmit(e) {
+    e.preventDefault();
 
-  //   const target = e.target;
-  //   const comment = target.comment.value;
+    const target = e.target;
+    const comment = target.comment.value.trim();
 
-  //   this.props.action.sendIsInputing(false);
-  //   this.props.action.sendMessage(comment);
-  //   target.comment.value = '';
-  // }
+    // this.props.action.sendIsInputing(false);
+    // this.props.action.sendMessage(comment);
+    target.comment.value = '';
+  }
 
-  // hundleKeyUp(e) {
-  //   this.props.action.sendIsInputing(e.target.value !== '');
-  // }
+  hundleKeyUp(e) {
+    // this.props.action.sendIsInputing(e.target.value !== '');
+  }
 
-  // hundleBlur() {
-  //   this.props.action.sendIsInputing(false);
-  // }
+  hundleBlur() {
+    // this.props.action.sendIsInputing(false);
+  }
 
   // renderList() {
   //   return this.state.chatList.map(chat => <li key={chat.msgId}>{chat.msg}</li>);
@@ -89,18 +98,16 @@ export default class ChatView extends Component {
   render() {
     return (
       <div className="p-chat">
-        <div className="p-chat__inner js-chat-scroll">
+        <div className="p-chat__inner">
           <div className="p-chat__box">
-            <ul className="p-chat__list js-chat-scroll-list">
-              <li>hoge</li>
-              <li>hoge</li>
-              <li>hoge</li>
-            </ul>
+            <ul className="p-chat__list"></ul>
           </div>
         </div>
 
-        <form className="p-chat__comment" onSubmit={this.hundleSubmit}>
-          <div className="p-chat__comment__txt"><input className="p-chat__comment__txt__input" name="comment" type="text" placeholder="チャットを送る…" autoComplete="off" onKeyUp={this.hundleKeyUp} onBlur={this.hundleBlur} /></div>
+        <form className="p-chat__comment" onSubmit={::this.hundleSubmit}>
+          <div className="p-chat__comment__txt">
+            <input className="p-chat__comment__txt__input" name="comment" type="text" placeholder="チャットを送る…" autoComplete="off" onKeyUp={this.hundleKeyUp} onBlur={this.hundleBlur} />
+          </div>
           <input className="p-chat__comment__btn" type="submit" value="送信" />
         </form>
       </div>
@@ -111,8 +118,14 @@ export default class ChatView extends Component {
 // {this.renderList()}
 // {this.renderIsInputing()}
 
-// ChatView.propTypes = {
-//   socket: PropTypes.object.isRequired,
-//   action: PropTypes.object.isRequired,
-//   store: PropTypes.object.isRequired
-// };
+ChatView.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  chat: PropTypes.object.isRequired
+};
+
+function select({ auth, chat }) {
+  return { auth, chat };
+}
+
+export default connect(select)(ChatView);

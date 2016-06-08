@@ -3,6 +3,7 @@
 //-------------------------------------*/
 
 .header {
+  height: $header-height;
   padding: 10px;
   background-color: #222;
   color: #fff;
