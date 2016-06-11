@@ -1,7 +1,7 @@
 const login = require('./api/login');
 const users = require('./api/users');
 
-module.exports = jwt => [
+module.exports = [
   {
     path: '/assets/{param*}',
     method: 'GET',
@@ -18,6 +18,6 @@ module.exports = jwt => [
       reply.view('index', { title: 'アオミドロピグ' });
     }
   },
-  ...login(jwt),
+  ...login,
   ...users
 ];

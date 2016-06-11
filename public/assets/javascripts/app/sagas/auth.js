@@ -1,3 +1,4 @@
+import uuid from 'node-uuid';
 import { take, call, put } from 'redux-saga/effects';
 import {
   fetchLoginState,
@@ -10,13 +11,14 @@ import {
   signup,
   failSignup
 } from '../actions/auth';
-import superFetch from '../modules/superFetch';
+import superFetch from '../utils/superFetch';
 
 export function* handleFetchLoginState() {
   while (true) {
     yield take(`${fetchLoginState}`);
 
     const jwt = localStorage.getItem('jwt');
+    const accessToken = localStorage.getItem('accessToken');
 
     if (jwt) {
       const { payload, err } = yield call(superFetch, {
@@ -24,7 +26,8 @@ export function* handleFetchLoginState() {
         type: 'GET',
         custom: {
           headers: {
-            authorization: `Bearer ${jwt}`
+            Authorization: `Bearer ${jwt}`,
+            accessToken
           }
         }
       });
@@ -45,7 +48,12 @@ export function* handleLogin() {
     const { payload, err } = yield call(superFetch, {
       url: '/api/login/',
       type: 'POST',
-      data: action.payload
+      data: action.payload,
+      custom: {
+        headers: {
+          accessToken: uuid.v4()
+        }
+      }
     });
 
     if (!payload && err) {
@@ -54,10 +62,12 @@ export function* handleLogin() {
     }
 
     const jwt = payload[0].jsonWebToken;
+    const accessToken = payload[0].accessToken;
 
     localStorage.setItem('jwt', jwt);
+    localStorage.setItem('accessToken', accessToken);
 
-    yield put(login(Object.assign({}, payload[0], { jwt })));
+    yield put(login(Object.assign({}, payload[0], { jwt, accessToken })));
   }
 }
 
@@ -66,6 +76,7 @@ export function* handleLogout() {
     yield take(`${clickLogout}`);
 
     localStorage.removeItem('jwt');
+    localStorage.removeItem('accessToken');
 
     yield put(logout());
   }

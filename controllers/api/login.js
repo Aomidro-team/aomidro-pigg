@@ -1,14 +1,16 @@
 const Boom = require('boom');
+const jwt = require('jsonwebtoken');
 const secretKey = require('config').get('secretKey');
 const users = require('../../models/users');
 
-module.exports = jwt => [
+module.exports = [
   {
     path: '/api/login/',
     method: 'POST',
     handler: (request, reply) => {
       const userId = request.payload.userId;
       const pass = request.payload.pass;
+      const accessToken = request.headers.accesstoken;
 
       users.getByUserIdAndPass(userId, pass)
       .then(results => {
@@ -24,10 +26,11 @@ module.exports = jwt => [
         const account = results[0];
         const jsonWebToken = jwt.sign({
           id: account.id,
-          mail: account.mail
+          mail: account.mail,
+          accessToken
         }, secretKey);
 
-        return reply([Object.assign({}, account, { jsonWebToken })]);
+        return reply([Object.assign({}, account, { jsonWebToken, accessToken })]);
       })
       .catch(err => reply(Boom.badImplementation(String(err))));
     }
@@ -35,24 +38,27 @@ module.exports = jwt => [
   {
     path: '/api/login/',
     method: 'GET',
-    handler: (request, reply) => {
-      const jsonWebToken = request.headers.authorization.split(' ')[1];
+    config: {
+      auth: 'simple',
+      handler: (request, reply) => {
+        const jsonWebToken = request.auth.credentials.token;
 
-      jwt.verify(jsonWebToken, secretKey, (err, decode) => {
-        if (err) {
-          reply(Boom.badImplementation(String(err)));
-        }
-
-        users.getById(decode.id)
-        .then(results => {
-          if (!results.length) {
-            return reply(Boom.badImplementation('User is not found'));
+        jwt.verify(jsonWebToken, secretKey, (err, decode) => {
+          if (err) {
+            reply(Boom.badImplementation(String(err)));
           }
 
-          return reply(results);
-        })
-        .catch(error => reply(Boom.badImplementation(String(error))));
-      });
+          users.getById(decode.id)
+          .then(results => {
+            if (!results.length) {
+              return reply(Boom.badImplementation('User is not found'));
+            }
+
+            return reply(results);
+          })
+          .catch(error => reply(Boom.badImplementation(String(error))));
+        });
+      }
     }
   }
 ];

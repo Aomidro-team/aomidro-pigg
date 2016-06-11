@@ -3,11 +3,13 @@ const config = require('config');
 const vision = require('vision');
 const handlebars = require('handlebars');
 const inert = require('inert');
+const AuthBearer = require('hapi-auth-bearer-token');
 const jwt = require('jsonwebtoken');
+const secretKey = require('config').get('secretKey');
 
 const server = new Hapi.Server();
 
-const route = require('./controllers/route')(jwt);
+const route = require('./controllers/route');
 const socketIOConnection = require('./controllers/socketIO/connection');
 
 
@@ -37,6 +39,31 @@ server.register(inert, err => {
   if (err) {
     throw err;
   }
+});
+
+// validation
+server.register(AuthBearer, err => {
+  if (err) {
+    throw err;
+  }
+
+  server.auth.strategy('simple', 'bearer-access-token', {
+    validateFunc: function validate(token, callback) {
+      const accessToken = this.headers.accesstoken;
+
+      jwt.verify(token, secretKey, (error, decode) => {
+        if (error) {
+          return callback(null, false, { token });
+        }
+
+        if (accessToken === decode.accessToken) {
+          return callback(null, true, { token });
+        }
+
+        return callback(null, false, { token });
+      });
+    }
+  });
 });
 
 // routing

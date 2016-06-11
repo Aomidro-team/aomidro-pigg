@@ -21,7 +21,8 @@ const initial = {
     },
     isFetching: false,
     error: undefined,
-    jwt: ''
+    jwt: '',
+    accessToken: ''
   }
 };
 
@@ -48,7 +49,8 @@ const auth = createReducer({
     },
     isFetching: false,
     error: undefined,
-    jwt: payload.jwt
+    jwt: payload.jwt,
+    accessToken: payload.accessToken
   }),
   [logout]: () => Object.assign({}, initial.auth, {
     isPrepared: true
