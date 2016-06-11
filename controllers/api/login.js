@@ -1,30 +1,6 @@
 const Boom = require('boom');
-const encrypt = require('../encrypt');
-const execute = require('../mysqlConnection');
 const secretKey = require('config').get('secretKey');
-
-const query = {
-  fetchUserByUserIdAndPass: (userId, pass) => `
-    SELECT
-      id, user_id, name, mail
-    FROM
-     users
-    WHERE
-      user_id = "${userId}"
-    AND
-      password = "${pass}"
-    AND
-      deleted_at IS NULL`,
-  fetchUserById: id => `
-    SELECT
-      id, user_id, name, mail
-    FROM
-      users
-    WHERE
-      id = "${id}"
-    AND
-      deleted_at IS NULL`
-};
+const users = require('../../models/users');
 
 module.exports = jwt => [
   {
@@ -32,9 +8,9 @@ module.exports = jwt => [
     method: 'POST',
     handler: (request, reply) => {
       const userId = request.payload.userId;
-      const pass = encrypt(request.payload.pass);
+      const pass = request.payload.pass;
 
-      execute(query.fetchUserByUserIdAndPass(userId, pass))
+      users.getByUserIdAndPass(userId, pass)
       .then(results => {
         if (!results.length) {
           const err = Boom.badImplementation('userId or password is not found', {
@@ -67,7 +43,7 @@ module.exports = jwt => [
           reply(Boom.badImplementation(String(err)));
         }
 
-        execute(query.fetchUserById(decode.id))
+        users.getById(decode.id)
         .then(results => {
           if (!results.length) {
             return reply(Boom.badImplementation('User is not found'));

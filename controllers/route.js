@@ -1,4 +1,7 @@
-module.exports = [
+const login = require('./api/login');
+const users = require('./api/users');
+
+module.exports = jwt => [
   {
     path: '/assets/{param*}',
     method: 'GET',
@@ -14,5 +17,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.view('index', { title: 'アオミドロピグ' });
     }
-  }
+  },
+  ...login(jwt),
+  ...users
 ];

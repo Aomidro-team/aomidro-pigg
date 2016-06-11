@@ -29,8 +29,8 @@ class ChatView extends Component {
 
   componentWillMount() {
     const { dispatch, auth } = this.props;
-    const { accessToken } = auth;
-    dispatch(enterChat({ accessToken }));
+    const { jwt } = auth;
+    dispatch(enterChat({ jwt }));
   }
 
   // componentWillUpdate() {

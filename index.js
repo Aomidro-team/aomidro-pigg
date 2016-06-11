@@ -7,14 +7,8 @@ const jwt = require('jsonwebtoken');
 
 const server = new Hapi.Server();
 
-const routes = require('./app/routes');
-const login = require('./app/api/login');
-const users = require('./app/api/users');
-const routings = [
-  ...routes,
-  ...login(jwt),
-  ...users
-];
+const route = require('./controllers/route')(jwt);
+const socketIOConnection = require('./controllers/socketIO/connection');
 
 
 // Connect the server
@@ -22,7 +16,6 @@ server.connection({
   host: config.get('host'),
   port: normalizePort(process.env.PORT || '3000')
 });
-
 
 // template engine
 server.register(vision, err => {
@@ -39,7 +32,6 @@ server.register(vision, err => {
   });
 });
 
-
 // serving static files and directories
 server.register(inert, err => {
   if (err) {
@@ -47,10 +39,11 @@ server.register(inert, err => {
   }
 });
 
-
 // routing
-server.route(routings);
+server.route(route);
 
+// WebSocket
+socketIOConnection(server.listener);
 
 // Start the server
 server.start(err => {

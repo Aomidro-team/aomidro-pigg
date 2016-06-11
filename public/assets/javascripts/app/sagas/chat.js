@@ -4,14 +4,15 @@ import {
   enterChat
 } from '../actions/chat';
 
-function connect({ accessToken }) {
-  const socket = io.connect('', {
-    query: `token=${accessToken}`
-  });
+function connect({ jwt }) {
+  const socket = io.connect('');
 
   return new Promise(resolve => {
     socket.on('connect', () => {
-      resolve(socket);
+      socket.on('authenticated', () => {
+        resolve(socket);
+      })
+      .emit('authenticate', { token: jwt });
     });
   });
 }
@@ -21,6 +22,7 @@ export default function* chatFlow() {
     const action = yield take(`${enterChat}`);
     const socket = yield call(connect, action.payload);
     console.log(socket);
+
     // socket.emit('login', { username: payload.username });
     //
     // const task = yield fork(handleIO, socket);
