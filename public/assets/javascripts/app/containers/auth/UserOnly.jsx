@@ -21,7 +21,7 @@ class UserOnly extends Component {
   }
 
   render() {
-    return <div>{this.props.children}</div>;
+    return <div className="wrapper">{this.props.children}</div>;
   }
 }
 

@@ -1,5 +1,6 @@
 const login = require('./api/login');
 const users = require('./api/users');
+const rooms = require('./api/rooms');
 
 module.exports = [
   {
@@ -19,5 +20,6 @@ module.exports = [
     }
   },
   ...login,
-  ...users
+  ...users,
+  ...rooms
 ];

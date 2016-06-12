@@ -5,6 +5,7 @@ import {
   handleLogout,
   handleSignup
 } from './auth';
+import { handleFetchRooms } from './room';
 import chatFlow from './chat';
 
 export default function* rootSaga() {
@@ -12,6 +13,8 @@ export default function* rootSaga() {
   yield fork(handleLogin);
   yield fork(handleLogout);
   yield fork(handleSignup);
+
+  yield fork(handleFetchRooms);
 
   yield fork(chatFlow);
 }

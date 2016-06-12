@@ -43,7 +43,6 @@ class SocketIOOperation {
     switch (range) {
       case 'all':
         this.io.sockets.emit('message', content);
-        console.log(content);
         break;
 
       default:

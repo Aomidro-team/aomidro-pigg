@@ -1,8 +1,8 @@
 /*-------------------------------------//
-//  Auth
+//  Entrance
 //-------------------------------------*/
 
-.p-auth__wrapper {
+.p-entrance__wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,50 +10,51 @@
   height: 100%;
   background-color: #666;
 }
-.p-auth__inner {
+.p-entrance__box {
   display: inline-block;
   padding: 20px;
   background-color: #222;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, .6);
   color: #fff;
 }
-.p-auth__title {
+.p-entrance__title {
   margin-bottom: 20px;
   padding: 0 10px 10px;
   border-bottom: 1px solid #ccc;
   font-size: calc($font-size-xl + 4px);
   text-align: center;
 }
-.p-auth__form { width: 300px; }
-.p-auth__form__list {
-  margin-bottom: 20px;
+.p-entrance__list {
+  overflow-y: scroll;
+  width: 300px;
+  max-height: 500px;
 
-  & > li:not(:first-child) { margin-top: 20px; }
+  & > li {
+    display: table;
+    width: 100%;
+    padding: 10px 0;
+  }
 }
-.p-auth__form__title {
-  margin-bottom: 10px;
-  color: #7f7f7f;
+.p-entrance__list__title,
+.p-entrance__list__body {
+  display: table-cell;
+  vertical-align: middle;
 }
-.p-auth__input {
-  width: 100%;
+.p-entrance__list__body { text-align: right; }
+.p-entrance__list__count {
+  display: inline-block;
+  margin-right: 10px;
+}
+.p-entrance__list__link {
+  display: inline-block;
   padding: 5px 10px;
-  background-color: #333;
-  font-size: $font-size-m;
-}
-.p-auth__submit {
-  display: block;
-  width: 180px;
-  margin: 0 auto;
   background-color: #2244aa;
   font-size: $font-size-m;
-  line-height: 40px;
-  cursor: pointer;
   transition: background-color .4s;
 
   &:hover { background-color: #2270AA; }
 }
-.p-auth__error {
-  margin-bottom: 20px;
+.p-entrance__error {
   color: #E45858;
   font-size: $font-size-s;
   line-height: 18px;
