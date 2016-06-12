@@ -41,23 +41,17 @@ module.exports = [
     config: {
       auth: 'simple',
       handler: (request, reply) => {
-        const jsonWebToken = request.auth.credentials.token;
+        const user = request.auth.credentials.decode;
 
-        jwt.verify(jsonWebToken, secretKey, (err, decode) => {
-          if (err) {
-            reply(Boom.badImplementation(String(err)));
+        users.getById(user.id)
+        .then(results => {
+          if (!results.length) {
+            return reply(Boom.badImplementation('User is not found'));
           }
 
-          users.getById(decode.id)
-          .then(results => {
-            if (!results.length) {
-              return reply(Boom.badImplementation('User is not found'));
-            }
-
-            return reply(results);
-          })
-          .catch(error => reply(Boom.badImplementation(String(error))));
-        });
+          return reply(results);
+        })
+        .catch(error => reply(Boom.badImplementation(String(error))));
       }
     }
   }

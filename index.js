@@ -55,14 +55,14 @@ function validateFunc(token, callback) {
 
   jwt.verify(token, secretKey, (error, decode) => {
     if (error) {
-      return callback(null, false, { token });
+      return callback(null, false, { decode });
     }
 
     if (accessToken === decode.accessToken) {
-      return callback(null, true, { token });
+      return callback(null, true, { decode });
     }
 
-    return callback(null, false, { token });
+    return callback(null, false, { decode });
   });
 }
 
