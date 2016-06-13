@@ -47,24 +47,24 @@ server.register(AuthBearer, err => {
     throw err;
   }
 
-  server.auth.strategy('simple', 'bearer-access-token', { validateFunc });
-});
+  server.auth.strategy('simple', 'bearer-access-token', {
+    validateFunc(token, callback) {
+      const accessToken = this.headers.accesstoken;
 
-function validateFunc(token, callback) {
-  const accessToken = this.headers.accesstoken;
+      jwt.verify(token, secretKey, (error, decode) => {
+        if (error) {
+          return callback(null, false, { decode });
+        }
 
-  jwt.verify(token, secretKey, (error, decode) => {
-    if (error) {
-      return callback(null, false, { decode });
+        if (accessToken === decode.accessToken) {
+          return callback(null, true, { decode });
+        }
+
+        return callback(null, false, { decode });
+      });
     }
-
-    if (accessToken === decode.accessToken) {
-      return callback(null, true, { decode });
-    }
-
-    return callback(null, false, { decode });
   });
-}
+});
 
 // routing
 server.route(route);
