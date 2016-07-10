@@ -13,16 +13,10 @@ const socketIOConnection = listener => {
   }))
   .on('authenticated', socket => {
     users.getById(socket.decoded_token.id)
-    .then(results => ({
-      isSuccess: true,
-      res: results[0]
-    }))
-    .catch(err => ({
-      isSuccess: false,
-      res: err
-    }))
-    .then(status => {
-      const socketIOOperation = new SocketIOOperation(io, socket, status);
+    .then(results => results.length !== 0)
+    .catch(() => false)
+    .then(isSuccess => {
+      const socketIOOperation = new SocketIOOperation(io, socket, isSuccess);
       socketIOOperation.subscribeEvents();
     });
   });

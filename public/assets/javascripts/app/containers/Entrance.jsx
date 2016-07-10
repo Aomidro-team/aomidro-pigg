@@ -12,7 +12,7 @@ class Entrance extends Component {
   }
 
   renderRooms() {
-    const { error, all } = this.props.room;
+    const { error, list } = this.props.room;
 
     if (error) {
       return <p className="p-entrance__error">{error}</p>;
@@ -20,13 +20,13 @@ class Entrance extends Component {
 
     return (
       <ul className="p-entrance__list">
-        {all.map(item => (
+        {list.map(item => (
           <li key={item.id}>
             <p className="p-entrance__list__title">{item.name}</p>
 
             <div className="p-entrance__list__body">
               <p className="p-entrance__list__count">{item.userCount} 人</p>
-              <Link className="p-entrance__list__link" to={`/room/${item.roomId}`}>GO!</Link>
+              <Link className="p-entrance__list__link" to={`/room/${item.id}`}>GO!</Link>
             </div>
           </li>
         ))}
@@ -35,7 +35,9 @@ class Entrance extends Component {
   }
 
   render() {
-    if (!this.props.room.isPrepared) {
+    const { list, error } = this.props.room;
+
+    if (!list.length && !error) {
       const styles = {
         display: 'flex',
         justifyContent: 'center',

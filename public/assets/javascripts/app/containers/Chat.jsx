@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { enterChat } from '../actions/chat';
+import { clickLogout } from '../actions/auth';
 
 class ChatView extends Component {
   // constructor(props) {
@@ -28,17 +29,29 @@ class ChatView extends Component {
   // }
 
   componentWillMount() {
-    const { dispatch, auth } = this.props;
-    const { jwt } = auth;
-    dispatch(enterChat({ jwt }));
+    const { dispatch, auth, roomId } = this.props;
+    const { jwt, user } = auth;
+
+    dispatch(enterChat({
+      userId: user.userId,
+      jwt,
+      roomId
+    }));
   }
 
-  // componentWillUpdate() {
+  componentWillUpdate(nextProps) {
+    this.alertErrorIfExist(nextProps.chat.err);
     // const scroll = document.querySelector('.js-chat-scroll');
     // const list = scroll.querySelector('.js-chat-scroll-list');
-
+    //
     // this.scrollFlag = scroll.scrollTop + scroll.clientHeight === list.clientHeight + 20;
-  // }
+  }
+
+  alertErrorIfExist(err) {
+    if (err) {
+      this.props.dispatch(clickLogout());
+    }
+  }
 
   // componentDidUpdate() {
     // if (this.scrollFlag) {
@@ -62,18 +75,19 @@ class ChatView extends Component {
     const target = e.target;
     const comment = target.comment.value.trim();
 
+    console.log(comment);
     // this.props.action.sendIsInputing(false);
     // this.props.action.sendMessage(comment);
     target.comment.value = '';
   }
 
-  hundleKeyUp(e) {
+  // hundleKeyUp(e) {
     // this.props.action.sendIsInputing(e.target.value !== '');
-  }
+  // }
 
-  hundleBlur() {
+  // hundleBlur() {
     // this.props.action.sendIsInputing(false);
-  }
+  // }
 
   // renderList() {
   //   return this.state.chatList.map(chat => <li key={chat.msgId}>{chat.msg}</li>);
@@ -121,7 +135,8 @@ class ChatView extends Component {
 ChatView.propTypes = {
   dispatch: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  chat: PropTypes.object.isRequired
+  chat: PropTypes.object.isRequired,
+  roomId: PropTypes.string.isRequired
 };
 
 function select({ auth, chat }) {

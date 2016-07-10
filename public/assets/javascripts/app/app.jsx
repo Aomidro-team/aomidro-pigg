@@ -11,6 +11,7 @@ import GuestOnly from './containers/auth/GuestOnly';
 import Login from './containers/auth/Login';
 import Signup from './containers/auth/Signup';
 import Entrance from './containers/Entrance';
+import Room from './components/Room';
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
@@ -21,6 +22,7 @@ render(
       <Route path="/" component={App}>
         <Route component={UserOnly}>
           <IndexRoute component={Entrance} />
+          <Route path="/room/:roomId" component={Room} />
         </Route>
         <Route component={GuestOnly}>
           <Route path="/login" component={Login} />

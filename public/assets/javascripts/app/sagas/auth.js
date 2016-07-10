@@ -1,5 +1,5 @@
 import uuid from 'node-uuid';
-import { take, call, put } from 'redux-saga/effects';
+import { take, call, put, fork } from 'redux-saga/effects';
 import {
   fetchLoginState,
   failFetchingLoginState,
@@ -13,7 +13,7 @@ import {
 } from '../actions/auth';
 import superFetch from '../utils/superFetch';
 
-export function* handleFetchLoginState() {
+function* handleFetchLoginState() {
   while (true) {
     yield take(`${fetchLoginState}`);
 
@@ -42,7 +42,7 @@ export function* handleFetchLoginState() {
   }
 }
 
-export function* handleLogin() {
+function* handleLogin() {
   while (true) {
     const action = yield take(`${fetchUser}`);
     const { payload, err } = yield call(superFetch, {
@@ -71,7 +71,7 @@ export function* handleLogin() {
   }
 }
 
-export function* handleLogout() {
+function* handleLogout() {
   while (true) {
     yield take(`${clickLogout}`);
 
@@ -82,7 +82,7 @@ export function* handleLogout() {
   }
 }
 
-export function* handleSignup() {
+function* handleSignup() {
   while (true) {
     const action = yield take(`${signup}`);
     const { payload, err } = yield call(superFetch, {
@@ -99,4 +99,11 @@ export function* handleSignup() {
       yield put(failSignup(String(err).split('Error: ')[1]));
     }
   }
+}
+
+export default function* authFlow() {
+  yield fork(handleFetchLoginState);
+  yield fork(handleLogin);
+  yield fork(handleLogout);
+  yield fork(handleSignup);
 }

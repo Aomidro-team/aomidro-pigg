@@ -1,4 +1,4 @@
-import { take, call, put } from 'redux-saga/effects';
+import { take, call, put, fork } from 'redux-saga/effects';
 import {
   fetchRooms,
   failFetchingRooms,
@@ -6,7 +6,7 @@ import {
 } from '../actions/room';
 import superFetch from '../utils/superFetch';
 
-export function* handleFetchRooms() {
+function* handleFetchRooms() {
   while (true) {
     yield take(`${fetchRooms}`);
     const { payload, err } = yield call(superFetch, {
@@ -21,4 +21,8 @@ export function* handleFetchRooms() {
 
     yield put(successFetchingRooms(payload));
   }
+}
+
+export default function* roomFlow() {
+  yield fork(handleFetchRooms);
 }

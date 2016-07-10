@@ -1,40 +1,23 @@
 class SocketIOOperation {
-  constructor(io, socket, status) {
+  constructor(io, socket, isSuccess) {
     this.io = io;
     this.socket = socket;
 
-    this.init(status);
+    this.init(isSuccess);
   }
 
-  init(status) {
-    if (status.isSuccess) {
-      console.log(status.res);
-      // this.sendMessage({
-      //   range: 'all',
-      //   content: `${status.res}が入室しました。`
-      // });
-    } else {
-      console.log('error');
+  init(isSuccess) {
+    if (!isSuccess) {
+      this.sendError();
     }
-    // if (!results.length) {
-    //   const err = Boom.badImplementation('userId or password is not found', {
-    //     message: '入力されたユーザー名やパスワードが正しくありません。確認してからやりなおしてください。'
-    //   });
-    //   err.output.payload = Object.assign({}, err.output.payload, err.data);
-    //
-    //   return reply(err);
-    // }
-    // const account = results[0];
-    // const jsonWebToken = jwt.sign({
-    //   id: account.id,
-    //   mail: account.mail
-    // }, secretKey);
-    //
-    // return reply([Object.assign({}, account, { jsonWebToken })]);
   }
 
   subscribeEvents() {
+    this.socket.on('enterChat', payload => console.log(payload));
+  }
 
+  sendError(err) {
+    this.io.to(this.socket.id).emit('error', err);
   }
 
   sendMessage(val) {

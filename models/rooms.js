@@ -2,7 +2,7 @@ const execute = require('./mysqlConnection');
 const query = {
   getWithEnteringUserNum: `
     SELECT
-      rooms.id, rooms.room_id, name, COUNT(users.id) as count
+      rooms.id, name, COUNT(users.id) as count
     FROM
       rooms
     LEFT JOIN

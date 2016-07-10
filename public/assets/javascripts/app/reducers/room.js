@@ -6,37 +6,26 @@ import {
 
 const initial = {
   room: {
-    isPrepared: false,
-    all: [],
-    current: undefined,
-    currentRoomUsers: [],
+    list: [],
     error: undefined
   }
 };
 const roomBase = {
   id: undefined,
-  roomId: undefined,
   name: undefined,
   userCount: undefined
-};
-const userBase = {
-  id: undefined,
-  userId: undefined
 };
 
 const room = createReducer({
   [failFetchingRooms]: (state, err) => Object.assign({}, state, {
-    isPrepared: true,
-    all: [],
+    list: [],
     error: err
   }),
   [successFetchingRooms]: (state, payload) => Object.assign({}, state, {
-    isPrepared: true,
-    all: [
-      ...state.all,
+    list: [
+      ...state.list,
       ...payload.map(obj => Object.assign({}, roomBase, {
         id: obj.id,
-        roomId: obj.room_id,
         name: obj.name,
         userCount: obj.count
       }))

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Chat from '../containers/Chat';
 
-const Index = () =>
+const Room = ({ params }) =>
   <div className="wrapper">
     <div className="main">
       <div className="p-canvas">
@@ -9,7 +9,11 @@ const Index = () =>
       </div>
     </div>
 
-    <Chat />
+    <Chat roomId={params.roomId} />
   </div>;
 
-export default Index;
+Room.propTypes = {
+  params: PropTypes.object.isRequired
+};
+
+export default Room;
