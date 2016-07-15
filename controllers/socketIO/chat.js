@@ -15,20 +15,24 @@ class Chat {
     this.socket.on('changeIsInputing', ::this._onChangeIsInputing);
   }
 
-  async sendRecentlyMessage(room) {
-    const recentlyMessage = await messages.getMesseageByRoomId(room.id, 50);
-    this._sendMessage({
-      range: 'self',
-      event: 'recentlyMessage',
-      body: recentlyMessage.reverse().map(item => ({
-        id: item.message_id,
-        content: `${item.user_id}: ${item.content}`,
-        user: {
-          id: item.id,
-          userId: item.user_id,
-          name: item.name
-        }
-      }))
+  sendRecentlyMessage(room) {
+    return new Promise(async resolve => {
+      const recentlyMessage = await messages.getMesseageByRoomId(room.id, 50);
+
+      this._sendMessage({
+        range: 'self',
+        event: 'recentlyMessage',
+        body: recentlyMessage.reverse().map(item => ({
+          id: item.message_id,
+          content: `${item.user_id}: ${item.content}`,
+          user: {
+            id: item.id,
+            userId: item.user_id,
+            name: item.name
+          }
+        }))
+      });
+      resolve();
     });
   }
 

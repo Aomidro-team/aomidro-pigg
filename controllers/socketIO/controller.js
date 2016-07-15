@@ -37,8 +37,10 @@ class SocketIOOperation {
     usersRooms.add(user.id, room.id)
     .then(() => {
       this.addUserToStore(user, room);
-      this.chat.sendRecentlyMessage(room);
-      this.chat.sendEnterChat(room, user);
+      this.chat.sendRecentlyMessage(room)
+      .then(() => {
+        this.chat.sendEnterChat(room, user);
+      });
       this.canvas.addUser(room, user);
     })
     .catch(err => {
