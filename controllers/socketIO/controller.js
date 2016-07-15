@@ -1,7 +1,15 @@
+const usersRooms = require('../../models/users_rooms');
+const Chat = require('./chat');
+const Canvas = require('./canvas');
+
 class SocketIOOperation {
-  constructor(io, socket, isSuccess) {
+  constructor(io, socket, isSuccess, rooms) {
     this.io = io;
     this.socket = socket;
+    this.idStore = {};
+
+    this.chat = new Chat(this.io, this.socket, this.sendError);
+    this.canvas = new Canvas(this.io, this.socket, rooms);
 
     this.init(isSuccess);
   }
@@ -12,143 +20,57 @@ class SocketIOOperation {
     }
   }
 
-  subscribeEvents() {
-    this.socket.on('enterChat', payload => console.log(payload));
-  }
-
   sendError(err) {
     this.io.to(this.socket.id).emit('error', err);
   }
 
-  sendMessage(val) {
-    const { range, content } = val;
+  subscribeEvents() {
+    this.socket.on('enterRoom', ::this.onEnterRoom);
+    this.socket.on('disconnect', ::this.onExitRoom);
+    this.socket.on('exitRoom', ::this.onExitRoom);
+  }
 
-    switch (range) {
-      case 'all':
-        this.io.sockets.emit('message', content);
-        break;
+  onEnterRoom(payload) {
+    const user = payload.user;
+    const room = payload.room;
 
-      default:
-        break;
+    usersRooms.add(user.id, room.id)
+    .then(() => {
+      this.addUserToStore(user, room);
+      this.chat.sendRecentlyMessage(room);
+      this.chat.sendEnterChat(room, user);
+      this.canvas.addUser(room, user);
+    })
+    .catch(err => {
+      this.sendError(err);
+    });
+  }
+
+  addUserToStore(user, room) {
+    this.idStore[this.socket.id] = { user, room };
+    this.socket.join(room.roomId);
+  }
+
+  onExitRoom() {
+    if (this.idStore[this.socket.id]) {
+      const store = this.idStore[this.socket.id];
+
+      usersRooms.deleteByUserId(store.user.id)
+      .then(() => {
+        this.canvas.removeUser(store.room, store.user);
+        this.removeUserFromStore(store);
+        this.chat.sendExitChat(store);
+      })
+      .catch(() => {
+        this.sendError();
+      });
     }
+  }
+
+  removeUserFromStore(store) {
+    this.socket.leave(store.room.roomId);
+    Reflect.deleteProperty(this.idStore, this.socket.id);
   }
 }
 
 module.exports = SocketIOOperation;
-// export default class SocketCallbacks {
-//   events() {
-//     this.socket.on('connectChat', this.onConnectChat.bind(this));
-//     this.socket.on('message', this.onReceiveMsg.bind(this));
-//     this.socket.on('changeIsInputing', this.changeIsInputing.bind(this));
-//
-//     this.socket.on('addUser', this.addUser.bind(this));
-//     this.socket.on('disconnectCanvas', this.removeUser.bind(this));
-//     this.socket.on('updateGoalPos', this.updateGoalPos.bind(this));
-//   }
-//
-//   onConnectChat(value) {
-//     this.insertMsg(value.userId, value.msg)
-//     .then(async res => {
-//       const msgs = await this.fetchRecentlyMsg();
-//
-//       this.io.to(this.socket.id).emit('sendRecentlyMsg', msgs.reverse().map(msg => ({
-//         msgId: msg.id,
-//         msg: msg.content
-//       })));
-//       this.socket.broadcast.emit('message', Object.assign({}, value, {
-//         msgId: res.insertId
-//       }));
-//     })
-//     .catch(err => {
-//       throw err;
-//     });
-//   }
-//
-//   onReceiveMsg(value) {
-//     this.insertMsg(value.userId, value.msg)
-//     .then(res => {
-//       this.io.sockets.emit('message', Object.assign({}, value, {
-//         msgId: res.insertId
-//       }));
-//     })
-//     .catch(err => {
-//       throw err;
-//     });
-//   }
-//
-//   insertMsg(userId, msg) {
-//     return new Promise((resolve, reject) => {
-//       const current = moment().format('YYYY-MM-DD HH:mm:ss');
-//       const query = `
-//         INSERT INTO
-//           messages
-//             (user_id, content, created_at, updated_at)
-//           VALUES
-//             ("${userId}", "${msg}", "${current}", "${current}")`;
-//
-//       connection.query(query, (err, results) => {
-//         if (err) {
-//           reject(err);
-//         }
-//
-//         resolve(results);
-//       });
-//     });
-//   }
-//
-//   fetchRecentlyMsg() {
-//     return new Promise((resolve, reject) => {
-//       const query = `
-//         SELECT
-//           id, content
-//         FROM
-//           messages
-//         ORDER BY
-//           created_at DESC
-//         LIMIT 50`;
-//
-//       connection.query(query, (err, results) => {
-//         if (err) {
-//           reject(err);
-//         }
-//
-//         resolve(results);
-//       });
-//     });
-//   }
-//
-//   changeIsInputing(user) {
-//     this.socket.broadcast.emit('changeIsInputing', user);
-//   }
-//
-//   addUser(user) {
-//     users = [
-//       ...users,
-//       user
-//     ];
-//
-//     this.io.to(this.socket.id).emit('sendAllUser', users);
-//     this.socket.broadcast.emit('addUser', user);
-//   }
-//
-//   removeUser(leavedUser) {
-//     users = users.filter(user => user.id !== leavedUser.id);
-//
-//     this.io.sockets.emit('removeUser', leavedUser);
-//   }
-//
-//   updateGoalPos(changedUser) {
-//     users = users.map(user => {
-//       if (user.id === changedUser.id) {
-//         return Object.assign({}, user, {
-//           current: changedUser.goal,
-//           goal: changedUser.goal
-//         });
-//       }
-//
-//       return user;
-//     });
-//
-//     this.io.sockets.emit('newGoalPos', changedUser);
-//   }
-// }

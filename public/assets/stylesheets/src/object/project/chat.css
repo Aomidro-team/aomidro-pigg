@@ -3,6 +3,7 @@
 //-------------------------------------*/
 
 .p-chat {
+  position: relative;
   width: 300px;
   padding: 5px 5px 5px 0;
   background-color: #222;
@@ -28,6 +29,22 @@
   font-size: $font-size-ss;
 
   &.p-chat__list__inputing { color: #777; }
+}
+.p-chat__new {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  display: none;
+  padding: 5px 15px;
+  border-radius: 12px;
+  background-color: #4e99e6;
+  color: #fff;
+  font-size: $font-size-s;
+  transform: translateX(-50%);
+  transition: background-color .3s;
+
+  &:hover { background-color: #24a; }
+  &.is-active { display: inline-block; }
 }
 
 .p-chat__comment {

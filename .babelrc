@@ -5,6 +5,9 @@
     "stage-0"
   ],
   "plugins": [
+    ["transform-strict-mode", {
+      "strict": true
+    }],
     "syntax-async-functions",
     "transform-regenerator",
     ["transform-runtime", {

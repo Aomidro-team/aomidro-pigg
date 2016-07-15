@@ -11,7 +11,7 @@ import GuestOnly from './containers/auth/GuestOnly';
 import Login from './containers/auth/Login';
 import Signup from './containers/auth/Signup';
 import Entrance from './containers/Entrance';
-import Room from './components/Room';
+import Room from './containers/room/Room';
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);

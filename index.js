@@ -5,7 +5,7 @@ const handlebars = require('handlebars');
 const inert = require('inert');
 const AuthBearer = require('hapi-auth-bearer-token');
 const jwt = require('jsonwebtoken');
-const secretKey = require('config').get('secretKey');
+const secretKey = config.get('secretKey');
 
 const server = new Hapi.Server();
 
@@ -52,10 +52,6 @@ server.register(AuthBearer, err => {
       const accessToken = this.headers.accesstoken;
 
       jwt.verify(token, secretKey, (error, decode) => {
-        if (error) {
-          return callback(null, false, { decode });
-        }
-
         if (accessToken === decode.accessToken) {
           return callback(null, true, { decode });
         }

@@ -21,12 +21,12 @@ class Entrance extends Component {
     return (
       <ul className="p-entrance__list">
         {list.map(item => (
-          <li key={item.id}>
+          <li key={item.roomId}>
             <p className="p-entrance__list__title">{item.name}</p>
 
             <div className="p-entrance__list__body">
               <p className="p-entrance__list__count">{item.userCount} 人</p>
-              <Link className="p-entrance__list__link" to={`/room/${item.id}`}>GO!</Link>
+              <Link className="p-entrance__list__link" to={`/room/${item.roomId}`}>GO!</Link>
             </div>
           </li>
         ))}
@@ -40,17 +40,12 @@ class Entrance extends Component {
     if (!list.length && !error) {
       const styles = {
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
         width: '100%',
-        height: '100%'
+        justifyContent: 'center',
+        alignItems: 'center'
       };
 
-      return (
-        <div style={styles}>
-          <Loading size={60} border={10} />
-        </div>
-      );
+      return <div style={styles}><Loading size={60} border={10} /></div>;
     }
 
     return (

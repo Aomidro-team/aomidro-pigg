@@ -1,5 +1,6 @@
 import auth from './auth';
-import chat from './chat';
 import room from './room';
+import chat from './chat';
+import canvas from './canvas';
 
-export default { auth, chat, room };
+export default { auth, room, chat, canvas };

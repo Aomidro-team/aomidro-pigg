@@ -6,6 +6,7 @@ const SocketIOOperation = require('./controller');
 
 const socketIOConnection = listener => {
   const io = socektIo(listener);
+  const rooms = {};
 
   io.sockets.on('connection', socketioJwt.authorize({
     secret: config.get('secretKey'),
@@ -16,7 +17,7 @@ const socketIOConnection = listener => {
     .then(results => results.length !== 0)
     .catch(() => false)
     .then(isSuccess => {
-      const socketIOOperation = new SocketIOOperation(io, socket, isSuccess);
+      const socketIOOperation = new SocketIOOperation(io, socket, isSuccess, rooms);
       socketIOOperation.subscribeEvents();
     });
   });

@@ -1,11 +1,13 @@
 /*-------------------------------------//
-//  Main
+//  Room
 //-------------------------------------*/
 
-#app,
-.container { height: 100%; }
-.wrapper {
+.p-room {
   display: flex;
   width: 100%;
-  height: calc(100% - $header-height);
+}
+.p-room__main {
+  flex: 1;
+  height: 100%;
+  border: 5px solid #222;
 }

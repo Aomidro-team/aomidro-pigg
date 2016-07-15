@@ -23,6 +23,7 @@
   }
 }
 .header__info__dropdown {
+  z-index: 10;
   position: absolute;
   top: calc(100% + 10px);
   right: 0;

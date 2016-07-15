@@ -42,8 +42,8 @@
 @import "./object/project/entrance";
 @import "./object/project/chat";
 @import "./object/project/canvas";
-/*@import "./object/project/winper";
-@import "./object/project/weapon";*/
+@import "./object/project/room";
+/*@import "./object/project/weapon";*/
 
 
 /*----------------------------------------------
