@@ -16,7 +16,7 @@ class GuestOnly extends Component {
 
   userWillTransfer(props, router) {
     if (props.auth.isLoggedIn) {
-      router.replace('/');
+      router.replace('/entrance');
     }
   }
 

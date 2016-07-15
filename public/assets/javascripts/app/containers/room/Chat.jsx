@@ -145,7 +145,7 @@ class ChatView extends Component {
         </div>
 
         {(!this.flag.scroll && this.flag.newMessage) &&
-          <a onClick={::this.handleBottomClick} href="" className="p-chat__new is-active">↓ new message!</a>
+          <a onClick={::this.handleBottomClick} href="" className="p-chat__new is-active">↓ new message ↓</a>
         }
 
         <form className="p-chat__comment" onSubmit={::this.hundleSubmit}>

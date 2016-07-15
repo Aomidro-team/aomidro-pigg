@@ -16,7 +16,7 @@ class Room extends Component {
     const { jwt, user } = auth;
 
     if (!room.list.length) {
-      this.context.router.replace('/');
+      this.context.router.replace('/entrance');
       return;
     }
 

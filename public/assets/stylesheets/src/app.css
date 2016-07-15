@@ -30,20 +30,18 @@
 //---------------------------------------------*/
 
 @import "./object/component/loading";
-/*@import "./object/component/btn";
-@import "./object/component/input";*/
 
 
 /*----------------------------------------------
 //  Project
 //--------------------------------------------*/
 
+@import "./object/project/index";
 @import "./object/project/auth";
 @import "./object/project/entrance";
 @import "./object/project/chat";
 @import "./object/project/canvas";
 @import "./object/project/room";
-/*@import "./object/project/weapon";*/
 
 
 /*----------------------------------------------

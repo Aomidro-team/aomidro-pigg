@@ -1,0 +1,29 @@
+/*-------------------------------------//
+//  Index
+//-------------------------------------*/
+
+.p-index {
+  display: flex;
+  width: 100%;
+  height: calc(100% - $header-height);
+  justify-content: center;
+  align-items: center;
+}
+.p-index__box { text-align: center; }
+.p-index__title {
+  margin-bottom: 10px;
+  font-size: 50px;
+}
+.p-index__beta { margin-bottom: 100px; }
+.p-index__link {
+  display: block;
+  width: 180px;
+  margin: 0 auto;
+  background-color: #24a;
+  font-size: $font-size-m;
+  color: #fff;
+  line-height: 40px;
+  transition: background-color .4s;
+
+  &:hover { background-color: #2270aa; }
+}

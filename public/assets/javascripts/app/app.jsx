@@ -10,6 +10,7 @@ import UserOnly from './containers/auth/UserOnly';
 import GuestOnly from './containers/auth/GuestOnly';
 import Login from './containers/auth/Login';
 import Signup from './containers/auth/Signup';
+import Index from './components/Index';
 import Entrance from './containers/Entrance';
 import Room from './containers/room/Room';
 
@@ -20,8 +21,9 @@ render(
   <Provider store={store}>
     <Router history={history}>
       <Route path="/" component={App}>
+        <IndexRoute component={Index} />
         <Route component={UserOnly}>
-          <IndexRoute component={Entrance} />
+          <Route path="/entrance" component={Entrance} />
           <Route path="/room/:roomId" component={Room} />
         </Route>
         <Route component={GuestOnly}>
