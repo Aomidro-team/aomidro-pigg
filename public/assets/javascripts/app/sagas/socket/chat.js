@@ -13,7 +13,7 @@ function subscribe(socket) {
     socket.on('error', () => {
       emit(receiveError());
     });
-    socket.on('recentlyMessage', messages => {
+    socket.on('recentMessage', messages => {
       emit(newMessage({ body: messages }));
     });
     socket.on('messages.new', body => {

@@ -37,7 +37,7 @@ class SocketIOOperation {
     usersRooms.add(user.id, room.id)
     .then(() => {
       this.addUserToStore(user, room);
-      this.chat.sendRecentlyMessage(room)
+      this.chat.sendRecentMessage(room)
       .then(() => {
         this.chat.sendEnterChat(room, user);
       });
